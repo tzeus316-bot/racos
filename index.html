@@ -175,27 +175,58 @@
             opacity: 0.5;
         }
 
-        /* Yuvarlak GIF Kutusu */
-        .gif-circle {
-            width: 120px;
-            height: 120px;
+        /* Yuvarlak GIF Kutusu - ANA SAYFA */
+        .gif-circle-large {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid #b77dff;
+            box-shadow: 0 0 40px #a06eff, 0 0 80px rgba(160, 100, 255, 0.3);
+            margin: 0 auto 25px auto;
+            animation: glowPulse 3s ease-in-out infinite;
+            background: linear-gradient(135deg, #2a1a3a, #1a0f2a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gif-circle-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Yuvarlak GIF Kutusu - MENÜ */
+        .gif-circle-small {
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
             overflow: hidden;
             border: 3px solid #b77dff;
-            box-shadow: 0 0 30px #a06eff;
-            margin: 0 auto 20px auto;
-            animation: glowPulse 3s ease-in-out infinite;
+            box-shadow: 0 0 25px #a06eff;
+            margin: 0 auto 10px auto;
+            animation: glowPulseSmall 3s ease-in-out infinite;
+            background: linear-gradient(135deg, #2a1a3a, #1a0f2a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .gif-circle img {
+        .gif-circle-small img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
         @keyframes glowPulse {
-            0%, 100% { box-shadow: 0 0 30px #a06eff; border-color: #b77dff; }
-            50% { box-shadow: 0 0 50px #d5a2ff; border-color: #e0b0ff; }
+            0%, 100% { box-shadow: 0 0 40px #a06eff, 0 0 80px rgba(160, 100, 255, 0.3); border-color: #b77dff; }
+            50% { box-shadow: 0 0 70px #d5a2ff, 0 0 120px rgba(200, 150, 255, 0.4); border-color: #e0b0ff; transform: scale(1.02); }
+        }
+
+        @keyframes glowPulseSmall {
+            0%, 100% { box-shadow: 0 0 25px #a06eff; border-color: #b77dff; }
+            50% { box-shadow: 0 0 45px #d5a2ff; border-color: #e0b0ff; transform: scale(1.05); }
         }
 
         /* Sonuç Kartları */
@@ -284,6 +315,16 @@
         
         /* API'leri gizle */
         .hidden-api { display: none; }
+
+        /* Menü başlık */
+        .menu-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #d1b5ff;
+            text-align: center;
+            margin-top: 5px;
+            letter-spacing: 2px;
+        }
     </style>
 </head>
 <body>
@@ -315,9 +356,9 @@
     <!-- GİRİŞ/KAYIT MODAL -->
     <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden" style="background: rgba(5,3,10,0.95);">
         <div class="glass-panel p-8 max-w-md w-11/12">
-            <!-- YUVARLAK GIF KUTUSU -->
-            <div class="gif-circle">
-                <img src="https://media.tenor.com/f0M9OqtAqpzAAAAi/cyber-ghost.gif" alt="Cyber Ghost">
+            <!-- YUVARLAK GIF KUTUSU - BÜYÜK -->
+            <div class="gif-circle-large">
+                <img src="https://media1.tenor.com/m/f0M9OqtAqpzAAAAC/cyber-ghost.gif" alt="Cyber Ghost">
             </div>
             
             <div class="text-center mb-6">
@@ -376,11 +417,12 @@
                 </button>
             </div>
             
-            <!-- KÜÇÜK YUVARLAK GIF (Menüde de olabilir) -->
-            <div class="flex justify-center mb-4">
-                <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-purple-500">
-                    <img src="https://media.tenor.com/f0M9OqtAqpzAAAAi/cyber-ghost.gif" alt="Cyber Ghost" class="w-full h-full object-cover">
+            <!-- YUVARLAK GIF KUTUSU - KÜÇÜK + CYBER SORGU YAZISI -->
+            <div class="flex flex-col items-center mb-6">
+                <div class="gif-circle-small">
+                    <img src="https://media1.tenor.com/m/f0M9OqtAqpzAAAAC/cyber-ghost.gif" alt="Cyber Ghost">
                 </div>
+                <div class="menu-title">CYBER SORGU</div>
             </div>
             
             <!-- SORGULAR BAŞLIĞI -->
@@ -578,12 +620,16 @@
                 document.getElementById('login-form').style.display='block';
                 document.getElementById('register-form').style.display='none';
                 document.getElementById('login-tab').style.background='#6b3fa0';
+                document.getElementById('login-tab').style.color='white';
                 document.getElementById('register-tab').style.background='#2f1f47';
+                document.getElementById('register-tab').style.color='#beb0ff';
             } else {
                 document.getElementById('login-form').style.display='none';
                 document.getElementById('register-form').style.display='block';
                 document.getElementById('register-tab').style.background='#6b3fa0';
+                document.getElementById('register-tab').style.color='white';
                 document.getElementById('login-tab').style.background='#2f1f47';
+                document.getElementById('login-tab').style.color='#beb0ff';
             }
         }
 
