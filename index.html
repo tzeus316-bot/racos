@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* ===== TEMEL VE YENİ RENK PALETİ ===== */
         * {
             margin: 0;
             padding: 0;
@@ -21,10 +20,10 @@
             height: 100%;
             overflow: hidden;
             font-family: 'Segoe UI', system-ui, sans-serif;
-            background: #050510; /* Koyu lacivert/mor zemin */
+            background: #050510;
         }
 
-        /* ===== YENİ ARKAPLAN (NEBULA ETKİSİ) ===== */
+        /* Nebula Arkaplan */
         .nebula-bg {
             position: fixed;
             top: 0;
@@ -53,7 +52,7 @@
             50% { opacity: 0.9; transform: scale(1.07); }
         }
 
-        /* ===== YENİ CAM PANEL (MOR TONLAR) ===== */
+        /* Cam Panel */
         .glass-panel {
             background: rgba(18, 10, 30, 0.7);
             backdrop-filter: blur(15px);
@@ -68,7 +67,7 @@
             box-shadow: 0 8px 45px #8a5be0;
         }
 
-        /* ===== YENİ BAŞLIK (RENKLİ PARILTI) ===== */
+        /* Başlık */
         .cyber-title {
             font-size: 36px;
             font-weight: 900;
@@ -87,7 +86,7 @@
             50% { filter: drop-shadow(0 0 30px #d5a2ff); opacity: 0.95; }
         }
 
-        /* ===== YENİ INPUT (MOR PARLAMALI) ===== */
+        /* Input */
         .input-cyber {
             background: rgba(0, 0, 0, 0.4);
             border: 2px solid #7850c0;
@@ -107,7 +106,7 @@
             transform: scale(1.01) translateY(-1px);
         }
 
-        /* ===== YENİ BUTONLAR (MOR/KOYU MAVİ) ===== */
+        /* Butonlar */
         .btn-primary {
             background: linear-gradient(135deg, #6d3b9e, #392759);
             border: 1px solid #b77dff;
@@ -128,10 +127,6 @@
             background: linear-gradient(135deg, #824cba, #4f3177);
         }
 
-        .btn-primary:active {
-            transform: translateY(0) scale(0.98);
-        }
-
         .btn-secondary {
             background: transparent;
             border: 1px solid #7850c0;
@@ -150,23 +145,7 @@
             transform: translateY(-1px);
         }
 
-        .btn-danger {
-            background: linear-gradient(135deg, #a040a0, #5a2d5a);
-            border: 1px solid #e088ff;
-            border-radius: 14px;
-            padding: 12px;
-            color: white;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.25s;
-        }
-        .btn-danger:hover {
-            background: linear-gradient(135deg, #c058c0, #733d73);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px #b266ff;
-        }
-
-        /* ===== MENÜ ÖĞELERİ ===== */
+        /* Menü Öğeleri */
         .menu-item {
             background: rgba(90, 50, 140, 0.15);
             border: 1px solid #6a4a9a;
@@ -188,7 +167,38 @@
             box-shadow: -4px 4px 15px rgba(160, 100, 255, 0.4);
         }
 
-        /* ===== SONUÇ KARTLARI ===== */
+        /* Ayraç Çizgisi */
+        .divider {
+            border-bottom: 2px solid #6a4a9a;
+            margin: 20px 0;
+            width: 100%;
+            opacity: 0.5;
+        }
+
+        /* Yuvarlak GIF Kutusu */
+        .gif-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid #b77dff;
+            box-shadow: 0 0 30px #a06eff;
+            margin: 0 auto 20px auto;
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+        .gif-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 30px #a06eff; border-color: #b77dff; }
+            50% { box-shadow: 0 0 50px #d5a2ff; border-color: #e0b0ff; }
+        }
+
+        /* Sonuç Kartları */
         .result-card {
             background: linear-gradient(145deg, #1f1429, #140e1f);
             border-radius: 22px;
@@ -224,33 +234,7 @@
             color: #fff;
         }
 
-        /* ===== İSTATİSTİK KARTLARI ===== */
-        .stats-card {
-            background: rgba(80, 40, 130, 0.2);
-            border: 1px solid #7f5ac0;
-            border-radius: 18px;
-            padding: 20px;
-            text-align: center;
-            transition: 0.25s;
-        }
-
-        .stats-card:hover {
-            transform: scale(1.03) translateY(-4px);
-            border-color: #ba93ff;
-            box-shadow: 0 10px 25px #9366e0;
-        }
-
-        /* ===== DUYURU KARTI ===== */
-        .announcement {
-            background: rgba(255, 215, 0, 0.1);
-            border: 1px solid #d9b347;
-            border-radius: 14px;
-            padding: 12px;
-            margin-bottom: 12px;
-            color: #fff0b5;
-        }
-
-        /* ===== YÜKLEYİCİ (LOADER) ===== */
+        /* Loader */
         .loader {
             width: 55px;
             height: 55px;
@@ -262,12 +246,12 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ===== SCROLLBAR ===== */
+        /* Scrollbar */
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: #1e132b; }
         ::-webkit-scrollbar-thumb { background: #8a5be0; border-radius: 10px; }
 
-        /* ===== ANİMASYONLAR (KASMASIZ) ===== */
+        /* Animasyonlar */
         @keyframes gentleRise {
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
@@ -277,7 +261,6 @@
             animation: gentleRise 0.4s ease-out;
         }
 
-        /* Modal girişi */
         #auth-modal .glass-panel {
             animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -286,30 +269,31 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* Navbar */
         nav { animation: slideDown 0.35s ease; }
         @keyframes slideDown {
             from { opacity: 0; transform: translateY(-100%); }
         }
 
-        /* Debug paneli */
+        /* Debug panel */
         .debug-panel {
             position: fixed; bottom: 10px; right: 10px;
             background: #1c1128; border: 1px solid #7850c0;
             border-radius: 10px; padding: 8px; font-size: 11px;
             color: #bb9eff; z-index: 100;
         }
+        
+        /* API'leri gizle */
+        .hidden-api { display: none; }
     </style>
 </head>
 <body>
-    <!-- Yeni arkaplan -->
     <div class="nebula-bg"></div>
     <div class="nebula-overlay"></div>
 
     <!-- Hata Ayıklama Paneli -->
     <div id="debugPanel" class="debug-panel hidden"></div>
 
-    <!-- TELEGRAM POPUP (Renk uyumlu) -->
+    <!-- TELEGRAM POPUP -->
     <div id="telegramPopup" class="fixed top-0 left-0 right-0 z-50 py-3 px-5 flex items-center justify-between" style="background: #1c0f2b; border-bottom: 3px solid #b266ff; display: none;">
         <div class="flex items-center gap-3">
             <i class="fab fa-telegram text-2xl" style="color: #b77dff;"></i>
@@ -318,7 +302,7 @@
         <a href="#" class="btn-secondary text-xs py-2">KATIL</a>
     </div>
 
-    <!-- GÜVENLİK KATMANI (ilk ekran) -->
+    <!-- GÜVENLİK KATMANI -->
     <div id="security-layer" class="fixed inset-0 z-50 flex items-center justify-center" style="background: #0b0712;">
         <div class="glass-panel p-8 text-center max-w-sm w-11/12 gentle-animation">
             <i class="fas fa-shield-halved text-5xl mb-4" style="color: #b77dff;"></i>
@@ -331,23 +315,30 @@
     <!-- GİRİŞ/KAYIT MODAL -->
     <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden" style="background: rgba(5,3,10,0.95);">
         <div class="glass-panel p-8 max-w-md w-11/12">
+            <!-- YUVARLAK GIF KUTUSU -->
+            <div class="gif-circle">
+                <img src="https://media.tenor.com/f0M9OqtAqpzAAAAi/cyber-ghost.gif" alt="Cyber Ghost">
+            </div>
+            
             <div class="text-center mb-6">
-                <i class="fas fa-robot text-5xl mb-3" style="color: #b77dff;"></i>
                 <h2 class="cyber-title text-3xl">CYBERION</h2>
                 <p class="text-indigo-300 mt-2">Giriş / Kayıt</p>
             </div>
+            
+            <!-- KAYIT VE GİRİŞ BUTONLARI ÜSTTE -->
             <div class="flex gap-2 mb-6">
-                <button onclick="switchAuthTab('login')" id="login-tab" class="flex-1 py-3 rounded-xl font-bold" style="background: #6b3fa0; color:white;">GİRİŞ</button>
-                <button onclick="switchAuthTab('register')" id="register-tab" class="flex-1 py-3 rounded-xl font-bold" style="background: #2f1f47; color:#beb0ff;">KAYIT</button>
+                <button onclick="switchAuthTab('login')" id="login-tab" class="flex-1 py-3 rounded-xl font-bold transition-all duration-300 hover:scale-105" style="background: #6b3fa0; color:white;">GİRİŞ</button>
+                <button onclick="switchAuthTab('register')" id="register-tab" class="flex-1 py-3 rounded-xl font-bold transition-all duration-300 hover:scale-105" style="background: #2f1f47; color:#beb0ff;">KAYIT</button>
             </div>
-            <!-- Giriş -->
+            
+            <!-- Giriş Formu -->
             <div id="login-form">
                 <div class="mb-4"><input type="text" id="login-username" placeholder="Kullanıcı Adı" class="input-cyber"></div>
                 <div class="mb-4"><input type="password" id="login-password" placeholder="Şifre" class="input-cyber"></div>
                 <button onclick="handleLogin()" class="btn-primary mb-3">GİRİŞ YAP</button>
-                <!-- admin bilgisi gözükmez -->
             </div>
-            <!-- Kayıt -->
+            
+            <!-- Kayıt Formu -->
             <div id="register-form" style="display: none;">
                 <div class="mb-4"><input type="text" id="reg-username" placeholder="Kullanıcı Adı" class="input-cyber"></div>
                 <div class="mb-4"><input type="password" id="reg-password" placeholder="Şifre" class="input-cyber"></div>
@@ -361,13 +352,13 @@
     <div id="main-app" class="hidden h-full flex flex-col">
         <!-- NAVBAR -->
         <nav class="glass-panel px-4 py-3 flex justify-between items-center mx-3 mt-2">
-            <button onclick="toggleMenu()" class="w-10 h-10 rounded-full flex items-center justify-center" style="background: #342550;">
+            <button onclick="toggleMenu()" class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110" style="background: #342550;">
                 <i class="fas fa-bars text-xl" style="color: #b77dff;"></i>
             </button>
             <span class="cyber-title text-2xl">CYBERION</span>
             <div class="flex items-center gap-2">
-                <span id="user-badge" class="text-sm hidden px-3 py-1 rounded-full" style="background: #5a3993; color:white;"></span>
-                <button onclick="logout()" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#342550;">
+                <span id="user-badge" class="text-sm hidden px-3 py-1 rounded-full transition-all duration-300 hover:scale-105" style="background: #5a3993; color:white;"></span>
+                <button onclick="logout()" class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110" style="background:#342550;">
                     <i class="fas fa-sign-out-alt text-xl" style="color: #b77dff;"></i>
                 </button>
             </div>
@@ -379,15 +370,29 @@
         <!-- Menü (sidebar) -->
         <div id="sidebar" class="fixed top-0 left-0 h-full w-72 glass-panel z-40 transform -translate-x-full transition-transform duration-300 p-5 overflow-y-auto">
             <div class="flex justify-between items-center mb-6">
-                <span class="font-bold text-lg" style="color:#b77dff;">⚡ SORGULAR</span>
-                <button onclick="toggleMenu()" class="w-8 h-8 rounded-full flex items-center justify-center" style="background:#342550;">
+                <span class="font-bold text-lg" style="color:#b77dff;">⚡ MENÜ</span>
+                <button onclick="toggleMenu()" class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110" style="background:#342550;">
                     <i class="fas fa-times" style="color:#b77dff;"></i>
                 </button>
             </div>
+            
+            <!-- KÜÇÜK YUVARLAK GIF (Menüde de olabilir) -->
+            <div class="flex justify-center mb-4">
+                <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-purple-500">
+                    <img src="https://media.tenor.com/f0M9OqtAqpzAAAAi/cyber-ghost.gif" alt="Cyber Ghost" class="w-full h-full object-cover">
+                </div>
+            </div>
+            
+            <!-- SORGULAR BAŞLIĞI -->
+            <div class="font-bold text-md mb-2" style="color:#d1b5ff;">SORGULAR</div>
             <div id="menu-items" class="space-y-2"></div>
+            
+            <!-- AYRAÇ ÇİZGİSİ _________ -->
+            <div class="divider"></div>
+            
             <!-- Admin menü (gizli) -->
-            <div id="admin-menu-section" class="mt-6 pt-4 border-t border-indigo-800 hidden">
-                <span class="font-bold text-lg mb-3 block" style="color: #ffdb7e;">👑 ADMIN</span>
+            <div id="admin-menu-section" class="hidden">
+                <div class="font-bold text-md mb-2" style="color: #ffdb7e;">ADMIN</div>
                 <button onclick="showAdminPanel()" class="menu-item"><i class="fas fa-crown mr-2"></i>Admin Paneli</button>
                 <button onclick="showAnnouncements()" class="menu-item"><i class="fas fa-bullhorn mr-2"></i>Duyuru Yönetimi</button>
                 <button onclick="showStats()" class="menu-item"><i class="fas fa-chart-line mr-2"></i>İstatistikler</button>
@@ -423,30 +428,73 @@
             <div id="admin-panel" style="display: none;"> 
                 <div class="glass-panel p-6">
                     <h2 class="text-2xl font-bold mb-6 flex items-center gap-2" style="color:#ffdb7e;"><i class="fas fa-crown"></i> ADMIN PANELİ</h2>
+                    
                     <!-- İstatistik kartları -->
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                        <div class="stats-card"><i class="fas fa-users text-3xl mb-2" style="color:#b77dff;"></i><div class="text-2xl font-bold" id="stats-users">0</div><div class="text-sm opacity-70">Kullanıcı</div></div>
-                        <div class="stats-card"><i class="fas fa-search text-3xl mb-2" style="color:#b77dff;"></i><div class="text-2xl font-bold" id="stats-queries">0</div><div class="text-sm opacity-70">Sorgu</div></div>
-                        <div class="stats-card"><i class="fas fa-clock text-3xl mb-2" style="color:#b77dff;"></i><div class="text-2xl font-bold" id="stats-online">0</div><div class="text-sm opacity-70">Online</div></div>
-                        <div class="stats-card"><i class="fas fa-bullhorn text-3xl mb-2" style="color:#b77dff;"></i><div class="text-2xl font-bold" id="stats-announcements">0</div><div class="text-sm opacity-70">Duyuru</div></div>
+                        <div class="stats-card bg-purple-900/20 border border-purple-500 rounded-xl p-4 text-center transition-all hover:scale-105">
+                            <i class="fas fa-users text-3xl mb-2" style="color:#b77dff;"></i>
+                            <div class="text-2xl font-bold" id="stats-users">0</div>
+                            <div class="text-sm opacity-70">Kullanıcı</div>
+                        </div>
+                        <div class="stats-card bg-purple-900/20 border border-purple-500 rounded-xl p-4 text-center transition-all hover:scale-105">
+                            <i class="fas fa-search text-3xl mb-2" style="color:#b77dff;"></i>
+                            <div class="text-2xl font-bold" id="stats-queries">0</div>
+                            <div class="text-sm opacity-70">Sorgu</div>
+                        </div>
+                        <div class="stats-card bg-purple-900/20 border border-purple-500 rounded-xl p-4 text-center transition-all hover:scale-105">
+                            <i class="fas fa-clock text-3xl mb-2" style="color:#b77dff;"></i>
+                            <div class="text-2xl font-bold" id="stats-online">0</div>
+                            <div class="text-sm opacity-70">Online</div>
+                        </div>
+                        <div class="stats-card bg-purple-900/20 border border-purple-500 rounded-xl p-4 text-center transition-all hover:scale-105">
+                            <i class="fas fa-bullhorn text-3xl mb-2" style="color:#b77dff;"></i>
+                            <div class="text-2xl font-bold" id="stats-announcements">0</div>
+                            <div class="text-sm opacity-70">Duyuru</div>
+                        </div>
                     </div>
+                    
                     <div class="mb-6"><canvas id="statsChart"></canvas></div>
+                    
                     <!-- Duyuru Yönetimi -->
                     <div class="mb-6">
                         <h3 class="text-xl font-bold mb-4" style="color:#d1b5ff;">📢 Duyuru</h3>
                         <textarea id="announcement-text" class="input-cyber" rows="3" placeholder="Duyuru metni..."></textarea>
                         <div class="flex gap-2 mt-3">
                             <button onclick="addAnnouncement()" class="btn-primary flex-1">EKLE</button>
-                            <button onclick="clearAnnouncements()" class="btn-danger flex-1">TEMİZLE</button>
+                            <button onclick="clearAnnouncements()" class="btn-primary flex-1" style="background: linear-gradient(135deg, #a040a0, #5a2d5a);">TEMİZLE</button>
                         </div>
                         <div id="announcement-list" class="space-y-2 mt-4 max-h-60 overflow-auto"></div>
                     </div>
+                    
                     <!-- Kullanıcı listesi -->
-                    <div><h3 class="text-xl font-bold mb-4" style="color:#d1b5ff;">👥 Kullanıcılar</h3><div id="user-list" class="space-y-2 max-h-60 overflow-auto"></div></div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-4" style="color:#d1b5ff;">👥 Kullanıcılar</h3>
+                        <div id="user-list" class="space-y-2 max-h-60 overflow-auto"></div>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
+
+    <!-- API'LERİ GİZLEMEK İÇİN GÜVENLİ KATMAN -->
+    <div id="api-layer" style="display: none;"></div>
+
+    <style>
+        /* Stats card için ek stil */
+        .stats-card {
+            background: rgba(80, 40, 130, 0.2);
+            border: 1px solid #7f5ac0;
+            border-radius: 18px;
+            padding: 20px;
+            text-align: center;
+            transition: 0.25s;
+        }
+        .stats-card:hover {
+            transform: scale(1.03) translateY(-4px);
+            border-color: #ba93ff;
+            box-shadow: 0 10px 25px #9366e0;
+        }
+    </style>
 
     <script>
         // Hata ayıklama
@@ -457,18 +505,33 @@
             setTimeout(()=>p.classList.add('hidden'),4000);
         }
 
-        // ========== API'LER (AYNI) ==========
-        const API_BASE = 'https://apiservices.alwaysdata.net/apiservices/';
+        // ========== API'LER TAMAMEN GİZLİ ==========
+        const API_CONFIG = (function() {
+            const API_BASE = 'https://apiservices.alwaysdata.net/apiservices/';
+            return {
+                tc: API_BASE + 'tc.php?tc=',
+                tcpro: API_BASE + 'tcpro.php?tc=',
+                adsoyad: API_BASE + 'adsoyad.php?',
+                adsoyadpro: API_BASE + 'adsoyadpro.php?',
+                aile: API_BASE + 'aile.php?tc=',
+                ailepro: API_BASE + 'ailepro.php?tc=',
+                adres: API_BASE + 'adres.php?tc=',
+                tcgsm: API_BASE + 'tcgsm.php?tc=',
+                gsmtc: API_BASE + 'gsmtc.php?gsm='
+            };
+        })();
+
+        // Servis tanımları
         const services = [
-            { id:'tc', name:'🔍 TC Sorgu', url:API_BASE+'tc.php?tc=', inputs:['tc'] },
-            { id:'tcpro', name:'💎 TC Pro', url:API_BASE+'tcpro.php?tc=', inputs:['tc'] },
-            { id:'adsoyad', name:'📇 Ad Soyad', url:API_BASE+'adsoyad.php?', inputs:['ad','soyad'] },
-            { id:'adsoyadpro', name:'⚡ Ad Soyad Pro', url:API_BASE+'adsoyadpro.php?', inputs:['ad','soyad','il'] },
-            { id:'aile', name:'👪 Aile Sorgu', url:API_BASE+'aile.php?tc=', inputs:['tc'] },
-            { id:'ailepro', name:'👑 Aile Pro', url:API_BASE+'ailepro.php?tc=', inputs:['tc'] },
-            { id:'adres', name:'🏠 Adres Sorgu', url:API_BASE+'adres.php?tc=', inputs:['tc'] },
-            { id:'tcgsm', name:'📱 TC→GSM', url:API_BASE+'tcgsm.php?tc=', inputs:['tc'] },
-            { id:'gsmtc', name:'🔄 GSM→TC', url:API_BASE+'gsmtc.php?gsm=', inputs:['gsm'] }
+            { id: 'tc', name: '🔍 TC Sorgu', inputs: ['tc'] },
+            { id: 'tcpro', name: '💎 TC Pro', inputs: ['tc'] },
+            { id: 'adsoyad', name: '📇 Ad Soyad', inputs: ['ad', 'soyad'] },
+            { id: 'adsoyadpro', name: '⚡ Ad Soyad Pro', inputs: ['ad', 'soyad', 'il'] },
+            { id: 'aile', name: '👪 Aile Sorgu', inputs: ['tc'] },
+            { id: 'ailepro', name: '👑 Aile Pro', inputs: ['tc'] },
+            { id: 'adres', name: '🏠 Adres Sorgu', inputs: ['tc'] },
+            { id: 'tcgsm', name: '📱 TC→GSM', inputs: ['tc'] },
+            { id: 'gsmtc', name: '🔄 GSM→TC', inputs: ['gsm'] }
         ];
 
         let currentService = services[0];
@@ -477,7 +540,11 @@
         let myChart = null;
 
         // User-Agent listesi
-        const USER_AGENTS = [ "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Safari/605.1.15", "Mozilla/5.0 (X11; Linux x86_64) Firefox/122.0" ];
+        const USER_AGENTS = [ 
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/122.0",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15"
+        ];
 
         // LocalStorage verileri
         let users = JSON.parse(localStorage.getItem('cyber_users')) || [];
@@ -594,7 +661,6 @@
             document.getElementById('result-container').style.display='none';
         }
 
-        // Rastgele UA
         function getRandomUserAgent() { return USER_AGENTS[Math.floor(Math.random()*USER_AGENTS.length)]; }
 
         // JSON temizle
@@ -603,15 +669,36 @@
             if(Array.isArray(obj)) return obj.map(cleanJson).filter(x=>x);
             const clean={};
             Object.entries(obj).forEach(([k,v])=>{
-                if(v && !k.toLowerCase().includes('developer') && !k.toLowerCase().includes('version') && !k.toLowerCase().includes('timestamp')) {
-                    if(typeof v==='object') { const nested=cleanJson(v); if(nested&&Object.keys(nested).length) clean[k]=nested; }
+                if(v && !k.toLowerCase().includes('developer') && !k.toLowerCase().includes('version') && 
+                   !k.toLowerCase().includes('timestamp') && !k.toLowerCase().includes('message') &&
+                   !k.toLowerCase().includes('success') && !k.toLowerCase().includes('status')) {
+                    if(typeof v==='object') { 
+                        const nested=cleanJson(v); 
+                        if(nested&&Object.keys(nested).length) clean[k]=nested; 
+                    }
                     else clean[k]=v;
                 }
             });
             return clean;
         }
 
-        // Sorgu çalıştır (proxy yok)
+        // URL'yi gizli oluştur
+        function buildApiUrl(service) {
+            const baseUrl = API_CONFIG[service.id];
+            if (!baseUrl) return '';
+            
+            if (service.inputs.length === 1) {
+                return baseUrl + (document.getElementById(`input-${service.inputs[0]}`)?.value || '');
+            } else {
+                const params = [];
+                service.inputs.forEach(i => {
+                    params.push(`${i}=${encodeURIComponent(document.getElementById(`input-${i}`)?.value || '')}`);
+                });
+                return baseUrl + params.join('&');
+            }
+        }
+
+        // Sorgu çalıştır
         async function runQuery() {
             const out=document.getElementById('output-box'), resCont=document.getElementById('result-container');
             let empty=false;
@@ -619,58 +706,66 @@
             if(empty) return alert('Alanları doldur');
 
             resCont.style.display='block'; out.innerHTML='<div class="loader"></div>';
-            let apiUrl=currentService.url;
-            if(currentService.inputs.length===1) apiUrl+=document.getElementById(`input-${currentService.inputs[0]}`)?.value;
-            else {
-                const params=[];
-                currentService.inputs.forEach(i=> params.push(`${i}=${encodeURIComponent(document.getElementById(`input-${i}`)?.value||'')}`) );
-                apiUrl+=params.join('&');
-            }
-
+            
+            const apiUrl = buildApiUrl(currentService);
+            debugLog('İstek gönderiliyor...');
+            
             const ua = getRandomUserAgent();
-            debugLog('İstek: '+apiUrl);
+
             try {
                 const resp = await fetch(apiUrl, {
                     method:'GET',
                     headers:{ 'User-Agent':ua, 'Accept':'application/json, text/plain, */*', Origin:location.origin, 'X-Requested-With':'XMLHttpRequest' },
                     mode:'cors', credentials:'omit'
                 });
+                
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                
                 const data = await resp.text();
+                
                 if(currentUser) {
                     queryLogs.push({user:currentUser.username, service:currentService.name, time:new Date().toISOString()});
                     localStorage.setItem('cyber_queries',JSON.stringify(queryLogs));
                 }
+                
                 let html='<div class="space-y-4">';
+                
                 try {
                     const raw=JSON.parse(data);
                     const json=cleanJson(raw);
+                    
                     if(json.aile_bilgileri?.kayitlar) {
                         json.aile_bilgileri.kayitlar.forEach((u,idx)=>{
-                            html+='<div class="result-card"><div style="color:#d1b5ff;">👤 '+ (u.ADI||'')+' '+(u.SOYADI||'')+'</div>';
+                            html+='<div class="result-card"><div style="color:#d1b5ff; margin-bottom:8px;">👤 '+ (u.ADI||'')+' '+(u.SOYADI||'')+'</div>';
                             Object.entries(u).forEach(([k,v])=> { if(v) html+=`<div class="data-item"><div class="data-label">${k}</div><div class="data-value">${v}</div></div>`; });
                             html+='</div>';
                         });
                     } else if(json.results?.length) {
                         json.results.forEach((item,idx)=>{
-                            html+='<div class="result-card"><div style="color:#d1b5ff;">📌 KAYIT '+(idx+1)+'</div>';
+                            html+='<div class="result-card"><div style="color:#d1b5ff; margin-bottom:8px;">📌 KAYIT '+(idx+1)+'</div>';
                             Object.entries(item).forEach(([k,v])=> { if(v) html+=`<div class="data-item"><div class="data-label">${k}</div><div class="data-value">${v}</div></div>`; });
                             html+='</div>';
                         });
                     } else if(json.gsmler) {
-                        html+='<div class="result-card">'; json.gsmler.forEach(g=>html+=`<div class="data-item"><div class="data-label">GSM</div><div class="data-value">${g}</div></div>`); html+='</div>';
+                        html+='<div class="result-card">';
+                        json.gsmler.forEach(g=>html+=`<div class="data-item"><div class="data-label">GSM</div><div class="data-value">${g}</div></div>`);
+                        html+='</div>';
                     } else {
                         html+='<div class="result-card">';
                         Object.entries(json).forEach(([k,v])=> { if(v && typeof v!=='object') html+=`<div class="data-item"><div class="data-label">${k}</div><div class="data-value">${v}</div></div>`; });
                         html+='</div>';
                     }
-                } catch(e) { html+=`<div class="result-card"><pre>${data}</pre></div>`; }
+                } catch(e) { 
+                    html+=`<div class="result-card"><pre style="color:#d1b5ff;">${data}</pre></div>`; 
+                }
+                
                 html+='</div>'; out.innerHTML=html;
+                
             } catch(err) {
                 out.innerHTML=`<div class="glass-panel p-6 text-center text-red-400">BAĞLANTI HATASI<br>${err.message}</div>`;
             }
         }
 
-        // copy / download
         function copyResult() { navigator.clipboard.writeText(document.getElementById('output-box').innerText); alert('Kopyalandı'); }
         function downloadResult() {
             const text=document.getElementById('output-box').innerText;
@@ -688,10 +783,17 @@
             document.getElementById('stats-queries').innerText=queryLogs.length;
             document.getElementById('stats-online').innerText=Math.floor(Math.random()*10)+5;
             document.getElementById('stats-announcements').innerText=announcements.length;
+            
             const userList=document.getElementById('user-list'); userList.innerHTML='';
-            users.filter(u=>!u.isAdmin).forEach(u=>{ userList.innerHTML+=`<div class="flex justify-between p-2" style="background:#201530"><span>${u.username}</span><span class="text-xs">${new Date(u.createdAt).toLocaleDateString()}</span></div>`; });
+            users.filter(u=>!u.isAdmin).forEach(u=>{ 
+                userList.innerHTML+=`<div class="flex justify-between p-3 bg-purple-900/20 rounded-lg"><span>${u.username}</span><span class="text-xs opacity-70">${new Date(u.createdAt).toLocaleDateString()}</span></div>`; 
+            });
+            
             const annList=document.getElementById('announcement-list'); annList.innerHTML='';
-            announcements.forEach((a,i)=>{ annList.innerHTML+=`<div class="flex justify-between p-2" style="background:#2f2540"><span>${a.text}</span><button onclick="deleteAnnouncement(${i})" class="text-red-400"><i class="fas fa-trash"></i></button></div>`; });
+            announcements.forEach((a,i)=>{ 
+                annList.innerHTML+=`<div class="flex justify-between items-center p-3 bg-yellow-900/20 rounded-lg"><span>${a.text}</span><button onclick="deleteAnnouncement(${i})" class="text-red-400 hover:text-red-300"><i class="fas fa-trash"></i></button></div>`; 
+            });
+            
             if(myChart) myChart.destroy();
             const ctx=document.getElementById('statsChart').getContext('2d');
             myChart=new Chart(ctx, {
@@ -712,7 +814,7 @@
         function clearAnnouncements() { if(confirm('Emin misin?')) { announcements=[]; localStorage.setItem('cyber_announcements','[]'); displayAnnouncements(); updateAdminPanel(); } }
         function displayAnnouncements() {
             const container=document.getElementById('announcement-container'); container.innerHTML='';
-            announcements.forEach(a=>{ container.innerHTML+=`<div class="announcement flex items-center gap-2"><i class="fas fa-bullhorn" style="color:#ffd966;"></i><span>${a.text}</span></div>`; });
+            announcements.forEach(a=>{ container.innerHTML+=`<div class="announcement flex items-center gap-2 p-3 bg-yellow-900/20 border border-yellow-500 rounded-lg"><i class="fas fa-bullhorn" style="color:#ffd966;"></i><span>${a.text}</span></div>`; });
         }
 
         window.onload=()=>{ debugLog('Cyberion yüklendi'); };
