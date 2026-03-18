@@ -249,20 +249,6 @@
             padding: 12px;
             margin-bottom: 12px;
         }
-        
-        .cors-info {
-            position: fixed;
-            bottom: 10px;
-            left: 10px;
-            background: rgba(0,0,0,0.9);
-            border: 1px solid #8b0000;
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-size: 12px;
-            color: #00ff00;
-            z-index: 100;
-            max-width: 250px;
-        }
     </style>
 </head>
 <body>
@@ -270,10 +256,6 @@
     <div class="blood-overlay"></div>
 
     <div id="debugPanel" class="debug-panel"></div>
-    
-    <div class="cors-info" id="corsInfo">
-        🔄 CORS Proxy: <span id="proxyStatus">Hazırlanıyor...</span>
-    </div>
 
     <div id="telegramPopup" class="fixed top-0 left-0 right-0 telegram-popup py-3 px-5 flex items-center justify-between z-50" style="display: none;">
         <div class="flex items-center gap-3">
@@ -473,7 +455,7 @@
             }, 5000);
         }
 
-        // ========== GÜNCEL API'LER (IBAN ve KARDEŞ KALDIRILDI) ==========
+        // ========== API LİSTESİ ==========
         const API_BASE = 'https://apiservices.alwaysdata.net/apiservices/';
         
         const services = [
@@ -490,11 +472,14 @@
 
         let currentService = services[0];
 
-        // ========== CORS PROXY ==========
-        const PROXY_LIST = [
-            'https://api.allorigins.win/raw?url=',
-            'https://corsproxy.io/?',
-            'https://cors-anywhere.herokuapp.com/'
+        // ========== GÜÇLÜ USER-AGENT'LER (SADECE BUNLAR KALDI) ==========
+        const USER_AGENTS = [
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/122.0",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15",
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+            "Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1"
         ];
 
         // ========== YENİ DEĞİŞKENLER ==========
@@ -504,7 +489,6 @@
         let currentUser = null;
         let isAdmin = false;
         let myChart = null;
-        let activeProxyIndex = 0;
 
         // Admin hesabı
         if (!users.some(u => u.username === 'cyber21admin')) {
@@ -666,18 +650,12 @@
             debugLog('Servis seçildi', service.name);
         }
 
-        // ========== USER-AGENT ==========
-        const USER_AGENTS = [
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/122.0",
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15"
-        ];
-
+        // Rastgele User-Agent seç
         function getRandomUserAgent() {
             return USER_AGENTS[Math.floor(Math.random() * USER_AGENTS.length)];
         }
 
-        // ========== JSON TEMİZLEME ==========
+        // JSON temizleme
         function cleanJson(obj) {
             if (typeof obj !== 'object' || obj === null) return obj;
             
@@ -710,37 +688,7 @@
             return clean;
         }
 
-        // ========== CORS ÇÖZÜMÜ ==========
-        async function fetchWithCors(url) {
-            const randomUA = getRandomUserAgent();
-            
-            for (let i = 0; i < PROXY_LIST.length; i++) {
-                try {
-                    const proxyUrl = PROXY_LIST[i] + encodeURIComponent(url);
-                    document.getElementById('proxyStatus').innerHTML = `Proxy ${i+1} deneniyor...`;
-                    
-                    const response = await fetch(proxyUrl, {
-                        method: 'GET',
-                        headers: {
-                            'User-Agent': randomUA,
-                            'Accept': 'application/json, text/plain, */*'
-                        }
-                    });
-                    
-                    if (response.ok) {
-                        activeProxyIndex = i;
-                        document.getElementById('proxyStatus').innerHTML = `✅ Proxy ${i+1} aktif`;
-                        return response;
-                    }
-                } catch (e) {
-                    debugLog(`Proxy ${i+1} başarısız`);
-                }
-            }
-            
-            throw new Error('Bağlantı hatası - Lütfen internetinizi kontrol edin');
-        }
-
-        // ========== SORGU ÇALIŞTIR ==========
+        // ========== SORGU ÇALIŞTIR (PROXY YOK, SADECE USER-AGENT) ==========
         async function runQuery() {
             const out = document.getElementById('output-box');
             const resCont = document.getElementById('result-container');
@@ -771,13 +719,34 @@
                 apiUrl += params.join('&');
             }
 
+            const randomUA = getRandomUserAgent();
             debugLog('API isteği gönderiliyor', apiUrl);
+            debugLog('Kullanılan User-Agent', randomUA);
 
             try {
-                const response = await fetchWithCors(apiUrl);
+                // PROXY YOK - DOĞRUDAN FETCH
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'User-Agent': randomUA,
+                        'Accept': 'application/json, text/plain, */*',
+                        'Origin': window.location.origin,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    mode: 'cors',
+                    credentials: 'omit'
+                });
+                
+                debugLog('Yanıt alındı', 'Status: ' + response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP Hata! Status: ${response.status}`);
+                }
+                
                 const data = await response.text();
                 debugLog('Veri alındı', data.substring(0, 200) + '...');
                 
+                // Sorguyu logla
                 if (currentUser) {
                     queryLogs.push({
                         user: currentUser.username,
@@ -831,6 +800,7 @@
                     }
                     
                 } catch (e) {
+                    debugLog('JSON parse hatası', e.message);
                     html += `<div class="result-card"><pre style="color:#ff9999;">${data}</pre></div>`;
                 }
                 
@@ -838,11 +808,12 @@
                 out.innerHTML = html;
                 
             } catch (error) {
+                debugLog('HATA', error.message);
                 out.innerHTML = `<div class="glass-panel p-6 text-center" style="color:#ff4d4d;">
                     <i class="fas fa-exclamation-triangle text-4xl mb-3"></i>
                     <p class="text-lg font-bold">BAĞLANTI HATASI</p>
                     <p class="text-sm opacity-70 mt-2">${error.message}</p>
-                    <p class="text-sm mt-2">CORS proxy aktif, tekrar dene...</p>
+                    <p class="text-xs opacity-50 mt-4">API: ${apiUrl}</p>
                 </div>`;
             }
         }
