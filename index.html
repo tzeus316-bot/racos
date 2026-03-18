@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CYBERSORGUPANELİ | PROFESYONEL SORGÜ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #030014;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        
+        /* SİBER TEMA - MOR/SİYAH */
+        .cyber-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #0a001f 0%, #000000 100%);
+            z-index: -2;
+        }
+        
+        .cyber-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(100, 0, 150, 0.3) 0%, transparent 40%),
+                        radial-gradient(circle at 70% 60%, rgba(50, 0, 100, 0.2) 0%, transparent 45%),
+                        repeating-linear-gradient(0deg, rgba(0, 255, 255, 0.03) 0px, rgba(0, 255, 255, 0.03) 2px, transparent 2px, transparent 4px);
+            animation: cyberWave 12s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        @keyframes cyberWave {
+            0%,100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.9; transform: scale(1.05); }
+        }
+        
+        /* CAM EFEKT */
+        .glass-panel {
+            background: rgba(20, 10, 30, 0.85);
+            backdrop-filter: blur(15px);
+            border: 1px solid #6a0dad;
+            box-shadow: 0 8px 32px rgba(106, 13, 173, 0.4);
+            border-radius: 24px;
+        }
+        
+        .cyber-title {
+            font-size: 36px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #a855f7, #3b0764);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px #a855f7);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+        
+        /* INPUT */
+        .input-cyber {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #6a0dad;
+            border-radius: 14px;
+            padding: 16px;
+            color: white;
+            width: 100%;
+            font-size: 16px;
+        }
+        
+        .input-cyber:focus {
+            outline: none;
+            border-color: #a855f7;
+            box-shadow: 0 0 25px #a855f7;
+        }
+        
+        /* BUTONLAR */
+        .btn-primary {
+            background: linear-gradient(135deg, #6a0dad, #2d0b4a);
+            border: 1px solid #a855f7;
+            border-radius: 14px;
+            padding: 16px;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid #6a0dad;
+            border-radius: 10px;
+            padding: 8px 14px;
+            color: #c084fc;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #8b0000, #4a0000);
+            border: 1px solid #ff4d4d;
+            border-radius: 14px;
+            padding: 12px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        
+        /* SONUÇ KARTLARI */
+        .result-card {
+            background: linear-gradient(145deg, #1a1030, #0f0a1a);
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 14px;
+            border: 1px solid #6a0dad;
+        }
+        
+        .data-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            border-left: 3px solid #a855f7;
+        }
+        
+        .data-label {
+            font-size: 11px;
+            color: #c084fc;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+        
+        .data-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            word-break: break-word;
+        }
+        
+        .tc-value {
+            color: #ffd700;
+            font-weight: 700;
+        }
+        
+        /* MENÜ */
+        .menu-item {
+            background: rgba(106, 13, 173, 0.1);
+            border: 1px solid #6a0dad;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 8px;
+            color: #c084fc;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+        
+        .menu-item.active {
+            background: rgba(106, 13, 173, 0.3);
+            border-color: #a855f7;
+        }
+        
+        /* LOADER */
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(106, 13, 173, 0.2);
+            border-top-color: #a855f7;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 30px auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1030;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #6a0dad;
+            border-radius: 5px;
+        }
+        
+        /* ADMIN BADGE */
+        .admin-badge {
+            background: linear-gradient(135deg, #ffd700, #b8860b);
+            color: #000;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        
+        /* STATS CARD */
+        .stats-card {
+            background: rgba(106, 13, 173, 0.1);
+            border: 1px solid #6a0dad;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        /* DUYURU */
+        .announcement {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid #ffd700;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- SİBER ARKAPLAN -->
+    <div class="cyber-bg"></div>
+    <div class="cyber-overlay"></div>
+
+    <!-- GİRİŞ/KAYIT MODAL -->
+    <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center" style="background: rgba(0,0,0,0.9); backdrop-filter: blur(5px);">
+        <div class="glass-panel p-8 max-w-md w-11/12">
+            <!-- LOGO -->
+            <div class="text-center mb-6">
+                <i class="fas fa-shield-halved text-5xl mb-3" style="color: #a855f7;"></i>
+                <h2 class="cyber-title text-3xl">CYBERSORGU</h2>
+                <p class="text-purple-300 mt-2">Profesyonel Sorgu Paneli</p>
+            </div>
+            
+            <!-- TAB MENÜ -->
+            <div class="flex gap-2 mb-6">
+                <button onclick="switchAuthTab('login')" id="login-tab" class="flex-1 py-3 rounded-xl font-bold" style="background: #6a0dad; color: white;">GİRİŞ</button>
+                <button onclick="switchAuthTab('register')" id="register-tab" class="flex-1 py-3 rounded-xl font-bold" style="background: rgba(106,13,173,0.3); color: #c084fc;">KAYIT</button>
+            </div>
+            
+            <!-- GİRİŞ FORM -->
+            <div id="login-form">
+                <div class="mb-4">
+                    <input type="text" id="login-username" placeholder="Kullanıcı Adı" class="input-cyber">
+                </div>
+                <div class="mb-4">
+                    <input type="password" id="login-password" placeholder="Şifre" class="input-cyber">
+                </div>
+                <button onclick="handleLogin()" class="btn-primary mb-3">GİRİŞ YAP</button>
+                <p class="text-center text-sm text-purple-300">Admin girişi: cyber21admin / cyberx</p>
+            </div>
+            
+            <!-- KAYIT FORM -->
+            <div id="register-form" style="display: none;">
+                <div class="mb-4">
+                    <input type="text" id="reg-username" placeholder="Kullanıcı Adı" class="input-cyber">
+                </div>
+                <div class="mb-4">
+                    <input type="password" id="reg-password" placeholder="Şifre" class="input-cyber">
+                </div>
+                <div class="mb-4">
+                    <input type="password" id="reg-password2" placeholder="Şifre Tekrar" class="input-cyber">
+                </div>
+                <button onclick="handleRegister()" class="btn-primary">KAYIT OL</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ANA UYGULAMA -->
+    <div id="main-app" class="hidden h-full flex flex-col">
+        <!-- NAVBAR -->
+        <nav class="glass-panel px-4 py-3 flex justify-between items-center mx-3 mt-2">
+            <button onclick="toggleMenu()" class="w-10 h-10 rounded-full flex items-center justify-center" style="background: rgba(106,13,173,0.3);">
+                <i class="fas fa-bars text-xl" style="color: #a855f7;"></i>
+            </button>
+            <span class="cyber-title text-2xl">CYBERSORGU</span>
+            <div class="flex items-center gap-2">
+                <span id="user-badge" class="text-sm hidden px-3 py-1 rounded-full" style="background: #6a0dad; color: white;"></span>
+                <button onclick="logout()" class="w-10 h-10 rounded-full flex items-center justify-center" style="background: rgba(106,13,173,0.3);">
+                    <i class="fas fa-sign-out-alt text-xl" style="color: #a855f7;"></i>
+                </button>
+            </div>
+        </nav>
+
+        <!-- DUYURU ALANI -->
+        <div id="announcement-container" class="mx-3 mt-2"></div>
+
+        <!-- MENÜ -->
+        <div id="sidebar" class="fixed top-0 left-0 h-full w-72 glass-panel z-40 transform -translate-x-full transition-transform p-5 overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <span class="font-bold text-lg" style="color: #a855f7;">🔮 SORGULAR</span>
+                <button onclick="toggleMenu()" class="w-8 h-8 rounded-full flex items-center justify-center" style="background: rgba(106,13,173,0.3);">
+                    <i class="fas fa-times" style="color: #a855f7;"></i>
+                </button>
+            </div>
+            <div id="menu-items" class="space-y-2"></div>
+            
+            <!-- ADMIN MENÜ (GİZLİ) -->
+            <div id="admin-menu-section" class="mt-6 pt-4 border-t border-purple-900 hidden">
+                <span class="font-bold text-lg mb-3 block" style="color: #ffd700;">⚡ ADMIN PANELİ</span>
+                <button onclick="showAdminPanel()" class="menu-item">
+                    <i class="fas fa-crown mr-2"></i> Admin Paneli
+                </button>
+                <button onclick="showAnnouncements()" class="menu-item">
+                    <i class="fas fa-bullhorn mr-2"></i> Duyuru Yönetimi
+                </button>
+                <button onclick="showStats()" class="menu-item">
+                    <i class="fas fa-chart-line mr-2"></i> İstatistikler
+                </button>
+                <button onclick="showUsers()" class="menu-item">
+                    <i class="fas fa-users mr-2"></i> Kullanıcılar
+                </button>
+            </div>
+        </div>
+
+        <!-- ANA İÇERİK -->
+        <main class="flex-1 overflow-y-auto p-4">
+            <!-- SORGU KARTI -->
+            <div id="query-section" class="glass-panel p-5 mb-4">
+                <h1 id="service-title" class="text-center font-bold text-xl mb-1" style="color: #c084fc;">TC Sorgu</h1>
+                <p id="service-desc" class="text-center text-sm opacity-70 mb-4">TC Kimlik Numarası Girin</p>
+                
+                <div id="input-container">
+                    <input type="text" id="input-tc" placeholder="TC KİMLİK NO GİRİN" class="input-cyber mb-3">
+                    <button onclick="runQuery()" class="btn-primary">
+                        <i class="fas fa-search mr-2"></i>SORGULAMAYI BAŞLAT
+                    </button>
+                </div>
+            </div>
+
+            <!-- SONUÇ BÖLÜMÜ -->
+            <div id="result-container" style="display: none;">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-bold flex items-center gap-2" style="color: #c084fc;">
+                        <i class="fas fa-skull" style="color: #a855f7;"></i> SORGÜ SONUCU
+                    </h3>
+                    <div class="flex gap-2">
+                        <button onclick="copyResult()" class="btn-secondary"><i class="fas fa-copy mr-1"></i>KOPYALA</button>
+                        <button onclick="downloadResult()" class="btn-secondary"><i class="fas fa-download mr-1"></i>İNDİR</button>
+                    </div>
+                </div>
+                <div id="output-box"></div>
+            </div>
+
+            <!-- ADMIN PANEL (GİZLİ) -->
+            <div id="admin-panel" style="display: none;">
+                <div class="glass-panel p-6">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center gap-2" style="color: #ffd700;">
+                        <i class="fas fa-crown"></i> ADMIN PANELİ
+                    </h2>
+                    
+                    <!-- İSTATİSTİK KARTLARI -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                        <div class="stats-card">
+                            <i class="fas fa-users text-3xl mb-2" style="color: #a855f7;"></i>
+                            <div class="text-2xl font-bold" id="stats-users">0</div>
+                            <div class="text-sm opacity-70">Kullanıcı</div>
+                        </div>
+                        <div class="stats-card">
+                            <i class="fas fa-search text-3xl mb-2" style="color: #a855f7;"></i>
+                            <div class="text-2xl font-bold" id="stats-queries">0</div>
+                            <div class="text-sm opacity-70">Sorgu</div>
+                        </div>
+                        <div class="stats-card">
+                            <i class="fas fa-clock text-3xl mb-2" style="color: #a855f7;"></i>
+                            <div class="text-2xl font-bold" id="stats-online">0</div>
+                            <div class="text-sm opacity-70">Online</div>
+                        </div>
+                        <div class="stats-card">
+                            <i class="fas fa-bullhorn text-3xl mb-2" style="color: #a855f7;"></i>
+                            <div class="text-2xl font-bold" id="stats-announcements">0</div>
+                            <div class="text-sm opacity-70">Duyuru</div>
+                        </div>
+                    </div>
+                    
+                    <!-- GRAFİK -->
+                    <div class="mb-6">
+                        <canvas id="statsChart"></canvas>
+                    </div>
+                    
+                    <!-- DUYURU YÖNETİMİ -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold mb-4" style="color: #c084fc;">📢 Duyuru Yönetimi</h3>
+                        <div class="mb-4">
+                            <textarea id="announcement-text" class="input-cyber" rows="3" placeholder="Duyuru metni..."></textarea>
+                        </div>
+                        <div class="flex gap-2 mb-4">
+                            <button onclick="addAnnouncement()" class="btn-primary flex-1">DUYURU EKLE</button>
+                            <button onclick="clearAnnouncements()" class="btn-danger flex-1">TEMİZLE</button>
+                        </div>
+                        <div id="announcement-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
+                    </div>
+                    
+                    <!-- KULLANICI LİSTESİ -->
+                    <div>
+                        <h3 class="text-xl font-bold mb-4" style="color: #c084fc;">👥 Kullanıcı Listesi</h3>
+                        <div id="user-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ========== VERİTABANI (localStorage) ==========
+        let users = JSON.parse(localStorage.getItem('cyber_users')) || [];
+        let announcements = JSON.parse(localStorage.getItem('cyber_announcements')) || [];
+        let queryLogs = JSON.parse(localStorage.getItem('cyber_queries')) || [];
+        let currentUser = null;
+        let isAdmin = false;
+        let currentService = null;
+        let myChart = null;
+
+        // ========== API LİSTESİ ==========
+        const API_BASE = 'https://apiservices.alwaysdata.net/apiservices/';
+        
+        const services = [
+            { id: 'tc', name: '🔍 TC Sorgu', url: API_BASE + 'tc.php?tc=', inputs: ['tc'] },
+            { id: 'tcpro', name: '💎 TC Pro', url: API_BASE + 'tcpro.php?tc=', inputs: ['tc'] },
+            { id: 'adsoyad', name: '📇 Ad Soyad', url: API_BASE + 'adsoyad.php?', inputs: ['ad', 'soyad'] },
+            { id: 'adsoyadpro', name: '⚡ Ad Soyad Pro', url: API_BASE + 'adsoyadpro.php?', inputs: ['ad', 'soyad', 'il'] },
+            { id: 'aile', name: '👪 Aile Sorgu', url: API_BASE + 'aile.php?tc=', inputs: ['tc'] },
+            { id: 'ailepro', name: '👑 Aile Pro', url: API_BASE + 'ailepro.php?tc=', inputs: ['tc'] },
+            { id: 'kardes', name: '🤝 Kardeş Sorgu', url: API_BASE + 'kardes.php?tc=', inputs: ['tc'] },
+            { id: 'adres', name: '🏠 Adres Sorgu', url: API_BASE + 'adres.php?tc=', inputs: ['tc'] },
+            { id: 'iban', name: '💳 IBAN Sorgu', url: API_BASE + 'iban.php?iban=', inputs: ['iban'] },
+            { id: 'tcgsm', name: '📱 TC → GSM', url: API_BASE + 'tcgsm.php?tc=', inputs: ['tc'] },
+            { id: 'gsmtc', name: '🔄 GSM → TC', url: API_BASE + 'gsmtc.php?gsm=', inputs: ['gsm'] }
+        ];
+
+        // ========== GİRİŞ/KAYIT İŞLEMLERİ ==========
+        function switchAuthTab(tab) {
+            if (tab === 'login') {
+                document.getElementById('login-form').style.display = 'block';
+                document.getElementById('register-form').style.display = 'none';
+                document.getElementById('login-tab').style.background = '#6a0dad';
+                document.getElementById('login-tab').style.color = 'white';
+                document.getElementById('register-tab').style.background = 'rgba(106,13,173,0.3)';
+                document.getElementById('register-tab').style.color = '#c084fc';
+            } else {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('register-form').style.display = 'block';
+                document.getElementById('register-tab').style.background = '#6a0dad';
+                document.getElementById('register-tab').style.color = 'white';
+                document.getElementById('login-tab').style.background = 'rgba(106,13,173,0.3)';
+                document.getElementById('login-tab').style.color = '#c084fc';
+            }
+        }
+
+        function handleLogin() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            
+            // Admin kontrolü
+            if (username === 'cyber21admin' && password === 'cyberx') {
+                currentUser = { username: 'cyber21admin', isAdmin: true };
+                isAdmin = true;
+                document.getElementById('auth-modal').style.display = 'none';
+                document.getElementById('main-app').classList.remove('hidden');
+                document.getElementById('user-badge').classList.remove('hidden');
+                document.getElementById('user-badge').innerHTML = '<i class="fas fa-crown mr-1"></i> ADMIN';
+                document.getElementById('admin-menu-section').classList.remove('hidden');
+                initApp();
+                return;
+            }
+            
+            // Normal kullanıcı kontrolü
+            const user = users.find(u => u.username === username && u.password === password);
+            if (user) {
+                currentUser = user;
+                isAdmin = false;
+                document.getElementById('auth-modal').style.display = 'none';
+                document.getElementById('main-app').classList.remove('hidden');
+                document.getElementById('user-badge').classList.remove('hidden');
+                document.getElementById('user-badge').innerHTML = `<i class="fas fa-user mr-1"></i> ${username}`;
+                initApp();
+            } else {
+                alert('Hatalı kullanıcı adı veya şifre!');
+            }
+        }
+
+        function handleRegister() {
+            const username = document.getElementById('reg-username').value;
+            const password = document.getElementById('reg-password').value;
+            const password2 = document.getElementById('reg-password2').value;
+            
+            if (!username || !password) {
+                alert('Tüm alanları doldurun!');
+                return;
+            }
+            
+            if (password !== password2) {
+                alert('Şifreler eşleşmiyor!');
+                return;
+            }
+            
+            if (users.some(u => u.username === username)) {
+                alert('Bu kullanıcı adı zaten alınmış!');
+                return;
+            }
+            
+            const newUser = { username, password, isAdmin: false, createdAt: new Date().toISOString() };
+            users.push(newUser);
+            localStorage.setItem('cyber_users', JSON.stringify(users));
+            
+            alert('Kayıt başarılı! Şimdi giriş yapabilirsiniz.');
+            switchAuthTab('login');
+        }
+
+        function logout() {
+            currentUser = null;
+            isAdmin = false;
+            document.getElementById('auth-modal').style.display = 'flex';
+            document.getElementById('main-app').classList.add('hidden');
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
+        }
+
+        // ========== UYGULAMA BAŞLATMA ==========
+        function initApp() {
+            // Admin değilse admin menüsünü gizle
+            if (!isAdmin) {
+                document.getElementById('admin-menu-section').classList.add('hidden');
+            }
+            
+            // Menüyü yükle
+            initMenu();
+            
+            // İlk servisi seç
+            selectService(services[0]);
+            
+            // Duyuruları göster
+            displayAnnouncements();
+            
+            // İstatistikleri güncelle
+            updateStats();
+        }
+
+        function initMenu() {
+            const menu = document.getElementById('menu-items');
+            menu.innerHTML = '';
+            services.forEach(s => {
+                const btn = document.createElement('button');
+                btn.className = "menu-item";
+                btn.innerHTML = s.name;
+                btn.onclick = () => selectService(s);
+                menu.appendChild(btn);
+            });
+        }
+
+        function selectService(service) {
+            currentService = service;
+            toggleMenu();
+            
+            document.getElementById('service-title').innerText = service.name;
+            document.getElementById('service-desc').innerText = service.inputs.map(i => i.toUpperCase()).join(' + ');
+            
+            // Sorgu bölümünü göster, admin panelini gizle
+            document.getElementById('query-section').style.display = 'block';
+            document.getElementById('admin-panel').style.display = 'none';
+            document.getElementById('result-container').style.display = 'none';
+            
+            const container = document.getElementById('input-container');
+            container.innerHTML = '';
+
+            service.inputs.forEach(input => {
+                const inputEl = document.createElement('input');
+                inputEl.placeholder = input.toUpperCase() + ' GİRİN';
+                inputEl.id = `input-${input}`;
+                inputEl.className = "input-cyber mb-3";
+                container.appendChild(inputEl);
+            });
+
+            const btn = document.createElement('button');
+            btn.className = "btn-primary";
+            btn.innerHTML = '<i class="fas fa-search mr-2"></i>SORGULAMAYI BAŞLAT';
+            btn.onclick = runQuery;
+            container.appendChild(btn);
+        }
+
+        // ========== SORGU İŞLEMLERİ ==========
+        async function runQuery() {
+            if (!currentService) return;
+            
+            // Input kontrolü
+            let emptyInput = false;
+            currentService.inputs.forEach(i => {
+                if (!document.getElementById(`input-${i}`)?.value) {
+                    emptyInput = true;
+                }
+            });
+            
+            if (emptyInput) {
+                alert('Lütfen tüm alanları doldurun!');
+                return;
+            }
+            
+            document.getElementById('result-container').style.display = 'block';
+            document.getElementById('output-box').innerHTML = '<div class="loader"></div>';
+
+            let apiUrl = currentService.url;
+            if (currentService.inputs.length === 1) {
+                apiUrl += document.getElementById(`input-${currentService.inputs[0]}`)?.value || '';
+            } else {
+                const params = [];
+                currentService.inputs.forEach(i => {
+                    params.push(`${i}=${encodeURIComponent(document.getElementById(`input-${i}`)?.value || '')}`);
+                });
+                apiUrl += params.join('&');
+            }
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*'
+                    }
+                });
+                
+                const data = await response.text();
+                
+                // Sorguyu logla
+                if (currentUser) {
+                    queryLogs.push({
+                        user: currentUser.username,
+                        service: currentService.name,
+                        time: new Date().toISOString()
+                    });
+                    localStorage.setItem('cyber_queries', JSON.stringify(queryLogs));
+                }
+                
+                let html = '<div class="space-y-4">';
+                
+                try {
+                    const json = JSON.parse(data);
+                    html += formatJsonOutput(json);
+                } catch (e) {
+                    html += `<div class="result-card"><pre style="color:#c084fc;">${data}</pre></div>`;
+                }
+                
+                html += '</div>';
+                document.getElementById('output-box').innerHTML = html;
+                
+            } catch (error) {
+                document.getElementById('output-box').innerHTML = `
+                    <div class="glass-panel p-6 text-center" style="color:#ff4d4d;">
+                        <i class="fas fa-exclamation-triangle text-4xl mb-3"></i>
+                        <p class="text-lg font-bold">BAĞLANTI HATASI</p>
+                        <p class="text-sm opacity-70 mt-2">${error.message}</p>
+                    </div>`;
+            }
+        }
+
+        function formatJsonOutput(json) {
+            let html = '';
+            
+            if (json.kardesler && Array.isArray(json.kardesler)) {
+                json.kardesler.forEach((kardes, idx) => {
+                    html += '<div class="result-card">';
+                    html += `<div style="color:#c084fc; margin-bottom:8px;">👤 KAYIT ${idx+1}</div>`;
+                    Object.entries(kardes).forEach(([k,v]) => {
+                        if(v) html += `<div class="data-item"><div class="data-label">${k}</div><div class="data-value ${k.includes('TC')?'tc-value':''}">${v}</div></div>`;
+                    });
+                    html += '</div>';
+                });
+            }
+            else if (json.aile_bilgileri?.kayitlar) {
+                json.aile_bilgileri.kayitlar.forEach((uye, idx) => {
+                    html += '<div class="result-card">';
+                    html += `<div style="color:#c084fc; margin-bottom:8px;">👤 ${uye.ADI || ''} ${uye.SOYADI || ''}</div>`;
+                    Object.entries(uye).forEach(([k,v]) => {
+                        if(v) html += `<div class="data-item"><div class="data-label">${k}</div><div class="data-value ${k.includes('TC')?'tc-value':''}">${v}</div></div>`;
+                    });
+                    html += '</div>';
+                });
+            }
+            else {
+                html += '<div class="result-card">';
+                Object.entries(json).forEach(([k,v]) => {
+                    if(v && typeof v !== 'object') {
+                        html += `<div class="data-item"><div class="data-label">${k}</div><div class="data-value ${k.includes('TC')?'tc-value':''}">${v}</div></div>`;
+                    }
+                });
+                html += '</div>';
+            }
+            
+            return html;
+        }
+
+        // ========== ADMIN PANELİ ==========
+        function showAdminPanel() {
+            toggleMenu();
+            document.getElementById('query-section').style.display = 'none';
+            document.getElementById('result-container').style.display = 'none';
+            document.getElementById('admin-panel').style.display = 'block';
+            updateAdminPanel();
+        }
+
+        function showAnnouncements() {
+            showAdminPanel();
+        }
+
+        function showStats() {
+            showAdminPanel();
+        }
+
+        function showUsers() {
+            showAdminPanel();
+        }
+
+        function updateAdminPanel() {
+            // İstatistikleri güncelle
+            document.getElementById('stats-users').innerText = users.length;
+            document.getElementById('stats-queries').innerText = queryLogs.length;
+            document.getElementById('stats-online').innerText = Math.floor(Math.random() * 10) + 1;
+            document.getElementById('stats-announcements').innerText = announcements.length;
+            
+            // Kullanıcı listesi
+            const userList = document.getElementById('user-list');
+            userList.innerHTML = '';
+            users.forEach(user => {
+                userList.innerHTML += `
+                    <div class="flex justify-between items-center p-3" style="background: rgba(106,13,173,0.1); border-radius: 10px;">
+                        <span><i class="fas fa-user mr-2"></i>${user.username}</span>
+                        <span class="text-xs opacity-50">${new Date(user.createdAt).toLocaleDateString()}</span>
+                    </div>
+                `;
+            });
+            
+            // Duyuru listesi
+            const announcementList = document.getElementById('announcement-list');
+            announcementList.innerHTML = '';
+            announcements.forEach((ann, index) => {
+                announcementList.innerHTML += `
+                    <div class="flex justify-between items-center p-3" style="background: rgba(255,215,0,0.1); border-radius: 10px;">
+                        <span>${ann.text}</span>
+                        <button onclick="deleteAnnouncement(${index})" class="text-red-500">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            });
+            
+            // Grafik
+            if (myChart) myChart.destroy();
+            const ctx = document.getElementById('statsChart').getContext('2d');
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
+                    datasets: [{
+                        label: 'Sorgu Sayısı',
+                        data: [12, 19, 25, 32, 28, 35],
+                        borderColor: '#a855f7',
+                        backgroundColor: 'rgba(168, 85, 247, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { labels: { color: '#c084fc' } }
+                    },
+                    scales: {
+                        y: { grid: { color: 'rgba(168,85,247,0.1)' }, ticks: { color: '#c084fc' } },
+                        x: { grid: { color: 'rgba(168,85,247,0.1)' }, ticks: { color: '#c084fc' } }
+                    }
+                }
+            });
+        }
+
+        function addAnnouncement() {
+            const text = document.getElementById('announcement-text').value;
+            if (!text) return;
+            
+            announcements.push({ text, date: new Date().toISOString() });
+            localStorage.setItem('cyber_announcements', JSON.stringify(announcements));
+            document.getElementById('announcement-text').value = '';
+            displayAnnouncements();
+            updateAdminPanel();
+        }
+
+        function deleteAnnouncement(index) {
+            announcements.splice(index, 1);
+            localStorage.setItem('cyber_announcements', JSON.stringify(announcements));
+            displayAnnouncements();
+            updateAdminPanel();
+        }
+
+        function clearAnnouncements() {
+            if (confirm('Tüm duyurular silinsin mi?')) {
+                announcements = [];
+                localStorage.setItem('cyber_announcements', JSON.stringify(announcements));
+                displayAnnouncements();
+                updateAdminPanel();
+            }
+        }
+
+        function displayAnnouncements() {
+            const container = document.getElementById('announcement-container');
+            container.innerHTML = '';
+            
+            announcements.forEach(ann => {
+                container.innerHTML += `
+                    <div class="announcement flex items-center gap-2">
+                        <i class="fas fa-bullhorn" style="color: #ffd700;"></i>
+                        <span class="text-white">${ann.text}</span>
+                    </div>
+                `;
+            });
+        }
+
+        function updateStats() {
+            setInterval(() => {
+                if (document.getElementById('admin-panel').style.display === 'block') {
+                    updateAdminPanel();
+                }
+            }, 5000);
+        }
+
+        // ========== MENÜ ==========
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+        }
+
+        // ========== YARDIMCI FONKSİYONLAR ==========
+        function copyResult() {
+            const text = document.getElementById('output-box').innerText;
+            navigator.clipboard.writeText(text);
+            alert('✓ Kopyalandı');
+        }
+
+        function downloadResult() {
+            const text = document.getElementById('output-box').innerText;
+            const blob = new Blob([text], {type: 'text/plain'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `CYBERSORGU_${Date.now()}.txt`;
+            a.click();
+        }
+
+        // ========== GÜVENLİK ==========
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'PrintScreen' || (e.ctrlKey && e.key === 'p')) e.preventDefault();
+        });
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        // Admin hesabını ekle
+        if (!users.some(u => u.username === 'cyber21admin')) {
+            users.push({ username: 'cyber21admin', password: 'cyberx', isAdmin: true, createdAt: new Date().toISOString() });
+            localStorage.setItem('cyber_users', JSON.stringify(users));
+        }
+    </script>
+</body>
+</html>
