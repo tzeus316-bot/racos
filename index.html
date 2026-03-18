@@ -254,13 +254,14 @@
             position: fixed;
             bottom: 10px;
             left: 10px;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.9);
             border: 1px solid #8b0000;
             border-radius: 8px;
-            padding: 5px 10px;
-            font-size: 11px;
-            color: #ff9999;
+            padding: 8px 12px;
+            font-size: 12px;
+            color: #00ff00;
             z-index: 100;
+            max-width: 250px;
         }
     </style>
 </head>
@@ -270,8 +271,9 @@
 
     <div id="debugPanel" class="debug-panel"></div>
     
-    <!-- CORS Bilgi -->
-    <div class="cors-info" id="corsInfo">🔄 CORS Proxy Aktif</div>
+    <div class="cors-info" id="corsInfo">
+        🔄 CORS Proxy: <span id="proxyStatus">Hazırlanıyor...</span>
+    </div>
 
     <div id="telegramPopup" class="fixed top-0 left-0 right-0 telegram-popup py-3 px-5 flex items-center justify-between z-50" style="display: none;">
         <div class="flex items-center gap-3">
@@ -471,7 +473,7 @@
             }, 5000);
         }
 
-        // ========== ORİJİNAL API'LER (DEĞİŞMEDİ) ==========
+        // ========== GÜNCEL API'LER (IBAN ve KARDEŞ KALDIRILDI) ==========
         const API_BASE = 'https://apiservices.alwaysdata.net/apiservices/';
         
         const services = [
@@ -481,24 +483,19 @@
             { id: 'adsoyadpro', name: '⚡ Ad Soyad Pro', url: API_BASE + 'adsoyadpro.php?', inputs: ['ad', 'soyad', 'il'] },
             { id: 'aile', name: '👪 Aile Sorgu', url: API_BASE + 'aile.php?tc=', inputs: ['tc'] },
             { id: 'ailepro', name: '👑 Aile Pro', url: API_BASE + 'ailepro.php?tc=', inputs: ['tc'] },
-            { id: 'kardes', name: '🤝 Kardeş Sorgu', url: API_BASE + 'kardes.php?tc=', inputs: ['tc'] },
             { id: 'adres', name: '🏠 Adres Sorgu', url: API_BASE + 'adres.php?tc=', inputs: ['tc'] },
-            { id: 'iban', name: '💳 IBAN Sorgu', url: API_BASE + 'iban.php?iban=', inputs: ['iban'] },
             { id: 'tcgsm', name: '📱 TC → GSM', url: API_BASE + 'tcgsm.php?tc=', inputs: ['tc'] },
             { id: 'gsmtc', name: '🔄 GSM → TC', url: API_BASE + 'gsmtc.php?gsm=', inputs: ['gsm'] }
         ];
 
         let currentService = services[0];
 
-        // ========== CORS SORUNUNU ÇÖZEN PROXY ==========
-        const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
-        // Alternatif proxy'ler (biri çalışmazsa diğerini dene):
+        // ========== CORS PROXY ==========
         const PROXY_LIST = [
-            'https://cors-anywhere.herokuapp.com/',
             'https://api.allorigins.win/raw?url=',
-            'https://corsproxy.io/?'
+            'https://corsproxy.io/?',
+            'https://cors-anywhere.herokuapp.com/'
         ];
-        let currentProxyIndex = 0;
 
         // ========== YENİ DEĞİŞKENLER ==========
         let users = JSON.parse(localStorage.getItem('cyber_users')) || [];
@@ -507,6 +504,7 @@
         let currentUser = null;
         let isAdmin = false;
         let myChart = null;
+        let activeProxyIndex = 0;
 
         // Admin hesabı
         if (!users.some(u => u.username === 'cyber21admin')) {
@@ -712,36 +710,14 @@
             return clean;
         }
 
-        // ========== YENİ: CORS SORUNUNU ÇÖZEN FETCH ==========
+        // ========== CORS ÇÖZÜMÜ ==========
         async function fetchWithCors(url) {
             const randomUA = getRandomUserAgent();
             
-            // 1. Deneme: Direkt fetch (bazı API'lerde çalışır)
-            try {
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'User-Agent': randomUA,
-                        'Accept': 'application/json, text/plain, */*',
-                        'Origin': window.location.origin,
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    mode: 'cors',
-                    credentials: 'omit'
-                });
-                
-                if (response.ok) {
-                    return response;
-                }
-            } catch (e) {
-                debugLog('Direkt fetch başarısız, proxy deneniyor...');
-            }
-            
-            // 2. Deneme: Proxy ile
             for (let i = 0; i < PROXY_LIST.length; i++) {
                 try {
                     const proxyUrl = PROXY_LIST[i] + encodeURIComponent(url);
-                    debugLog('Proxy deneniyor:', PROXY_LIST[i]);
+                    document.getElementById('proxyStatus').innerHTML = `Proxy ${i+1} deneniyor...`;
                     
                     const response = await fetch(proxyUrl, {
                         method: 'GET',
@@ -752,7 +728,8 @@
                     });
                     
                     if (response.ok) {
-                        document.getElementById('corsInfo').innerHTML = `✅ Proxy ${i+1} Aktif`;
+                        activeProxyIndex = i;
+                        document.getElementById('proxyStatus').innerHTML = `✅ Proxy ${i+1} aktif`;
                         return response;
                     }
                 } catch (e) {
@@ -760,10 +737,10 @@
                 }
             }
             
-            throw new Error('Tüm bağlantı denemeleri başarısız');
+            throw new Error('Bağlantı hatası - Lütfen internetinizi kontrol edin');
         }
 
-        // ========== SORGU ÇALIŞTIR (DÜZENLENMİŞ) ==========
+        // ========== SORGU ÇALIŞTIR ==========
         async function runQuery() {
             const out = document.getElementById('output-box');
             const resCont = document.getElementById('result-container');
@@ -797,13 +774,10 @@
             debugLog('API isteği gönderiliyor', apiUrl);
 
             try {
-                // YENİ: CORS sorununu çözen fetch fonksiyonu
                 const response = await fetchWithCors(apiUrl);
-                
                 const data = await response.text();
                 debugLog('Veri alındı', data.substring(0, 200) + '...');
                 
-                // Sorguyu logla
                 if (currentUser) {
                     queryLogs.push({
                         user: currentUser.username,
@@ -819,17 +793,7 @@
                     const rawJson = JSON.parse(data);
                     const json = cleanJson(rawJson);
                     
-                    if (json.kardesler && Array.isArray(json.kardesler)) {
-                        json.kardesler.forEach((kardes, idx) => {
-                            html += '<div class="result-card">';
-                            html += `<div style="color:#ff9999; margin-bottom:8px;">👤 KAYIT ${idx+1}</div>`;
-                            Object.entries(kardes).forEach(([k,v]) => {
-                                if(v) html += `<div class="data-item"><div class="data-label">${k}</div><div class="data-value ${k.includes('TC')?'tc-value':''}">${v}</div></div>`;
-                            });
-                            html += '</div>';
-                        });
-                    }
-                    else if (json.aile_bilgileri?.kayitlar) {
+                    if (json.aile_bilgileri?.kayitlar) {
                         json.aile_bilgileri.kayitlar.forEach((uye, idx) => {
                             html += '<div class="result-card">';
                             html += `<div style="color:#ff9999; margin-bottom:8px;">👤 ${uye.ADI || ''} ${uye.SOYADI || ''}</div>`;
@@ -849,15 +813,6 @@
                             html += '</div>';
                         });
                     }
-                    else if (json.data) {
-                        html += '<div class="result-card">';
-                        Object.entries(json.data).forEach(([k,v]) => {
-                            if(v && typeof v !== 'object') {
-                                html += `<div class="data-item"><div class="data-label">${k}</div><div class="data-value">${v}</div></div>`;
-                            }
-                        });
-                        html += '</div>';
-                    }
                     else if (json.gsmler) {
                         html += '<div class="result-card">';
                         json.gsmler.forEach(gsm => {
@@ -876,7 +831,6 @@
                     }
                     
                 } catch (e) {
-                    debugLog('JSON parse hatası', e.message);
                     html += `<div class="result-card"><pre style="color:#ff9999;">${data}</pre></div>`;
                 }
                 
@@ -884,13 +838,11 @@
                 out.innerHTML = html;
                 
             } catch (error) {
-                debugLog('HATA', error.message);
                 out.innerHTML = `<div class="glass-panel p-6 text-center" style="color:#ff4d4d;">
                     <i class="fas fa-exclamation-triangle text-4xl mb-3"></i>
                     <p class="text-lg font-bold">BAĞLANTI HATASI</p>
                     <p class="text-sm opacity-70 mt-2">${error.message}</p>
                     <p class="text-sm mt-2">CORS proxy aktif, tekrar dene...</p>
-                    <p class="text-xs opacity-50 mt-4">API: ${apiUrl}</p>
                 </div>`;
             }
         }
