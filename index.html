@@ -34,8 +34,8 @@
             z-index: -2;
         }
 
-        /* Hamburger Menü Arkaplan GIF'i */
-        .sidebar-bg {
+        /* GIF Arkaplan (SADECE SORGU BÖLÜMLERİ İÇİN) */
+        .gif-background {
             position: absolute;
             top: 0;
             left: 0;
@@ -44,45 +44,36 @@
             background-image: url('https://media4.giphy.com/media/v1.Y2lkPTZjMDliOTUydXgzOGFqZmR6cW1nanNmYWF3M2RuaTA3Z3d4OW40Y2Nmam51b2xtNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/IXnygGeB6LPPi/giphy.gif');
             background-size: cover;
             background-position: center;
-            opacity: 0.15;
+            opacity: 0.12;
             pointer-events: none;
             z-index: 0;
             animation: slowDrift 20s ease-in-out infinite;
+            border-radius: inherit;
         }
 
         @keyframes slowDrift {
-            0%, 100% { transform: scale(1); opacity: 0.15; }
-            50% { transform: scale(1.05); opacity: 0.2; }
+            0%, 100% { transform: scale(1); opacity: 0.12; }
+            50% { transform: scale(1.05); opacity: 0.18; }
         }
 
-        /* Cam Panel - Menü için özel */
-        .sidebar-panel {
-            background: rgba(10, 5, 20, 0.85);
+        /* Cam Panel - Sorgu bölümleri için GIF arkaplanlı */
+        .query-panel {
+            background: rgba(18, 10, 30, 0.7);
             backdrop-filter: blur(15px);
             border: 1px solid rgba(160, 100, 255, 0.4);
             box-shadow: 0 8px 35px rgba(120, 50, 200, 0.4);
             border-radius: 28px;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
             overflow: hidden;
         }
 
-        .sidebar-panel::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: inherit;
-            z-index: -1;
+        .query-panel:hover {
+            border-color: #b77dff;
+            box-shadow: 0 8px 45px #8a5be0;
         }
 
-        .sidebar-panel > * {
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Diğer Cam Paneller */
+        /* Normal Cam Panel (Menü ve diğerleri için - GIF'siz) */
         .glass-panel {
             background: rgba(18, 10, 30, 0.7);
             backdrop-filter: blur(15px);
@@ -196,10 +187,9 @@
             transform: translateY(-1px);
         }
 
-        /* Menü Öğeleri - GIF efektli */
+        /* Menü Öğeleri */
         .menu-item {
-            background: rgba(20, 10, 30, 0.4);
-            backdrop-filter: blur(5px);
+            background: rgba(90, 50, 140, 0.15);
             border: 1px solid #6a4a9a;
             border-radius: 14px;
             padding: 14px;
@@ -319,6 +309,20 @@
             animation: pulse 2s ease-in-out infinite;
         }
 
+        /* Mavi Tik Stili */
+        .blue-tick {
+            color: #3b82f6;
+            font-size: 20px;
+            margin-left: 8px;
+            animation: tickGlow 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px #3b82f6);
+        }
+
+        @keyframes tickGlow {
+            0%, 100% { filter: drop-shadow(0 0 8px #3b82f6); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 15px #60a5fa); transform: scale(1.1); }
+        }
+
         @keyframes glowPulse {
             0%, 100% { box-shadow: 0 0 40px #a06eff, 0 0 80px rgba(160, 100, 255, 0.3); border-color: #b77dff; }
             50% { box-shadow: 0 0 70px #d5a2ff, 0 0 120px rgba(200, 150, 255, 0.4); border-color: #e0b0ff; transform: scale(1.02); }
@@ -349,7 +353,7 @@
             50% { transform: scale(1.05); }
         }
 
-        /* Sonuç Kartları */
+        /* Sonuç Kartları - GIF arkaplanlı */
         .result-card {
             background: rgba(20, 10, 30, 0.6);
             backdrop-filter: blur(10px);
@@ -360,6 +364,10 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+        }
+
+        .result-card .gif-background {
+            opacity: 0.08;
         }
 
         .result-card::before {
@@ -373,6 +381,7 @@
             opacity: 0;
             transition: opacity 0.5s;
             pointer-events: none;
+            z-index: 1;
         }
 
         .result-card:hover::before {
@@ -473,9 +482,9 @@
         /* API'leri gizle */
         .hidden-api { display: none; }
 
-        /* Menü başlık */
+        /* Menü başlık - CYBER SORGU + MAVİ TİK */
         .menu-title {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             color: #d1b5ff;
             text-align: center;
@@ -483,6 +492,10 @@
             letter-spacing: 2px;
             text-shadow: 0 0 10px #a06eff;
             animation: titleGlow 2s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
         }
 
         @keyframes titleGlow {
@@ -583,7 +596,7 @@
     <!-- GİRİŞ/KAYIT MODAL -->
     <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden" style="background: rgba(5,3,10,0.95); backdrop-filter: blur(10px);">
         <div class="glass-panel p-8 max-w-md w-11/12">
-            <!-- YUVARLAK GIF KUTUSU - BÜYÜK (YENİ GIF) -->
+            <!-- YUVARLAK GIF KUTUSU - BÜYÜK -->
             <div class="gif-circle-large">
                 <img src="https://media4.giphy.com/media/v1.Y2lkPTZjMDliOTUydXgzOGFqZmR6cW1nanNmYWF3M2RuaTA3Z3d4OW40Y2Nmam51b2xtNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/IXnygGeB6LPPi/giphy.gif" alt="Cyber Glow">
             </div>
@@ -635,35 +648,35 @@
         <!-- Duyuru Alanı -->
         <div id="announcement-container" class="mx-3 mt-2"></div>
 
-        <!-- Menü (sidebar) - ARKAPLANDA GIF -->
-        <div id="sidebar" class="fixed top-0 left-0 h-full w-72 z-40 transform -translate-x-full transition-transform duration-500 p-5 overflow-y-auto sidebar-panel" style="background: transparent;">
-            <!-- GIF Arkaplan -->
-            <div class="sidebar-bg"></div>
-            
-            <div class="flex justify-between items-center mb-6 relative z-10">
+        <!-- Menü (sidebar) - GIF ARKAPLAN YOK -->
+        <div id="sidebar" class="fixed top-0 left-0 h-full w-72 glass-panel z-40 transform -translate-x-full transition-transform duration-500 p-5 overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
                 <span class="font-bold text-lg" style="color:#b77dff; text-shadow: 0 0 10px #a06eff;">⚡ MENÜ</span>
                 <button onclick="toggleMenu()" class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_#b77dff]" style="background:#342550;">
                     <i class="fas fa-times" style="color:#b77dff;"></i>
                 </button>
             </div>
             
-            <!-- YUVARLAK GIF KUTUSU - KÜÇÜK (YENİ GIF) + CYBER SORGU YAZISI -->
-            <div class="flex flex-col items-center mb-6 relative z-10">
+            <!-- YUVARLAK GIF KUTUSU - KÜÇÜK + CYBER SORGU YAZISI VE MAVİ TİK -->
+            <div class="flex flex-col items-center mb-6">
                 <div class="gif-circle-small">
                     <img src="https://media4.giphy.com/media/v1.Y2lkPTZjMDliOTUydXgzOGFqZmR6cW1nanNmYWF3M2RuaTA3Z3d4OW40Y2Nmam51b2xtNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/IXnygGeB6LPPi/giphy.gif" alt="Cyber Glow">
                 </div>
-                <div class="menu-title">CYBER SORGU</div>
+                <div class="menu-title">
+                    CYBER SORGU
+                    <i class="fas fa-check-circle blue-tick"></i>
+                </div>
             </div>
             
             <!-- SORGULAR BAŞLIĞI -->
-            <div class="font-bold text-md mb-2 relative z-10" style="color:#d1b5ff; text-shadow: 0 0 5px #a06eff;">SORGULAR</div>
-            <div id="menu-items" class="space-y-2 relative z-10"></div>
+            <div class="font-bold text-md mb-2" style="color:#d1b5ff; text-shadow: 0 0 5px #a06eff;">SORGULAR</div>
+            <div id="menu-items" class="space-y-2"></div>
             
             <!-- AYRAÇ ÇİZGİSİ _________ -->
-            <div class="divider relative z-10"></div>
+            <div class="divider"></div>
             
             <!-- Admin menü (gizli) -->
-            <div id="admin-menu-section" class="hidden relative z-10">
+            <div id="admin-menu-section" class="hidden">
                 <div class="font-bold text-md mb-2" style="color: #ffdb7e; text-shadow: 0 0 5px #ffaa00;">ADMIN</div>
                 <button onclick="showAdminPanel()" class="menu-item"><i class="fas fa-crown mr-2"></i>Admin Paneli</button>
                 <button onclick="showAnnouncements()" class="menu-item"><i class="fas fa-bullhorn mr-2"></i>Duyuru Yönetimi</button>
@@ -674,17 +687,19 @@
 
         <!-- Ana İçerik -->
         <main class="flex-1 overflow-y-auto p-4">
-            <!-- Sorgu Kartı -->
-            <div id="query-section" class="glass-panel p-5 mb-4 gentle-animation">
-                <h1 id="service-title" class="text-center font-bold text-xl mb-1" style="color:#d1b5ff;">TC Sorgu</h1>
-                <p id="service-desc" class="text-center text-sm opacity-70 mb-4">TC Kimlik No Girin</p>
-                <div id="input-container">
+            <!-- Sorgu Kartı - GIF ARKAPLANLI -->
+            <div id="query-section" class="query-panel p-5 mb-4 gentle-animation">
+                <!-- GIF Arkaplan -->
+                <div class="gif-background"></div>
+                <h1 id="service-title" class="text-center font-bold text-xl mb-1 relative z-10" style="color:#d1b5ff;">TC Sorgu</h1>
+                <p id="service-desc" class="text-center text-sm opacity-70 mb-4 relative z-10">TC Kimlik No Girin</p>
+                <div id="input-container" class="relative z-10">
                     <input type="text" id="input-tc" placeholder="TC KİMLİK NO" class="input-cyber mb-3">
                     <button onclick="runQuery()" class="btn-primary"><i class="fas fa-search mr-2"></i>SORGULA</button>
                 </div>
             </div>
 
-            <!-- Sonuç -->
+            <!-- Sonuç - GIF ARKAPLANLI -->
             <div id="result-container" style="display: none;">
                 <div class="flex justify-between items-center mb-3">
                     <h3 class="font-bold flex items-center gap-2" style="color:#d1b5ff;"><i class="fas fa-dragon" style="color:#b77dff; animation: pulse 2s ease-in-out infinite;"></i> SONUÇ</h3>
@@ -696,7 +711,7 @@
                 <div id="output-box"></div>
             </div>
 
-            <!-- Admin panel içeriği -->
+            <!-- Admin panel içeriği (GIF'siz) -->
             <div id="admin-panel" style="display: none;"> 
                 <div class="glass-panel p-6">
                     <h2 class="text-2xl font-bold mb-6 flex items-center gap-2" style="color:#ffdb7e;"><i class="fas fa-crown" style="animation: pulse 2s ease-in-out infinite;"></i> ADMIN PANELİ</h2>
@@ -995,23 +1010,29 @@
                     
                     if(json.aile_bilgileri?.kayitlar) {
                         json.aile_bilgileri.kayitlar.forEach((u,idx)=>{
-                            html+='<div class="result-card"><div style="color:#d1b5ff; margin-bottom:8px;">👤 '+ (u.ADI||'')+' '+(u.SOYADI||'')+'</div>';
-                            Object.entries(u).forEach(([k,v])=> { if(v) html+=`<div class="data-item"><div class="data-label">${k}</div><div class="data-value">${v}</div></div>`; });
+                            html+='<div class="result-card">';
+                            html+='<div class="gif-background"></div>';
+                            html+='<div style="color:#d1b5ff; margin-bottom:8px; position:relative; z-index:2;">👤 '+ (u.ADI||'')+' '+(u.SOYADI||'')+'</div>';
+                            Object.entries(u).forEach(([k,v])=> { if(v) html+=`<div class="data-item" style="position:relative; z-index:2;"><div class="data-label">${k}</div><div class="data-value">${v}</div></div>`; });
                             html+='</div>';
                         });
                     } else if(json.results?.length) {
                         json.results.forEach((item,idx)=>{
-                            html+='<div class="result-card"><div style="color:#d1b5ff; margin-bottom:8px;">📌 KAYIT '+(idx+1)+'</div>';
-                            Object.entries(item).forEach(([k,v])=> { if(v) html+=`<div class="data-item"><div class="data-label">${k}</div><div class="data-value">${v}</div></div>`; });
+                            html+='<div class="result-card">';
+                            html+='<div class="gif-background"></div>';
+                            html+='<div style="color:#d1b5ff; margin-bottom:8px; position:relative; z-index:2;">📌 KAYIT '+(idx+1)+'</div>';
+                            Object.entries(item).forEach(([k,v])=> { if(v) html+=`<div class="data-item" style="position:relative; z-index:2;"><div class="data-label">${k}</div><div class="data-value">${v}</div></div>`; });
                             html+='</div>';
                         });
                     } else if(json.gsmler) {
                         html+='<div class="result-card">';
-                        json.gsmler.forEach(g=>html+=`<div class="data-item"><div class="data-label">GSM</div><div class="data-value">${g}</div></div>`);
+                        html+='<div class="gif-background"></div>';
+                        json.gsmler.forEach(g=>html+=`<div class="data-item" style="position:relative; z-index:2;"><div class="data-label">GSM</div><div class="data-value">${g}</div></div>`);
                         html+='</div>';
                     } else {
                         html+='<div class="result-card">';
-                        Object.entries(json).forEach(([k,v])=> { if(v && typeof v!=='object') html+=`<div class="data-item"><div class="data-label">${k}</div><div class="data-value">${v}</div></div>`; });
+                        html+='<div class="gif-background"></div>';
+                        Object.entries(json).forEach(([k,v])=> { if(v && typeof v!=='object') html+=`<div class="data-item" style="position:relative; z-index:2;"><div class="data-label">${k}</div><div class="data-value">${v}</div></div>`; });
                         html+='</div>';
                     }
                 } catch(e) { 
