@@ -3,803 +3,719 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CYBERSORGUPANELİ | SORGÜ</title>
+    <title>CYBERION | GELİŞMİŞ PANEL</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        /* ===== TEMEL VE YENİ RENK PALETİ ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             user-select: none;
         }
-        
+
         html, body {
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background: #0a0000;
             font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #050510; /* Koyu lacivert/mor zemin */
         }
-        
-        /* KANLI ARKAPLAN - ANİMASYONLU */
-        .blood-bg {
+
+        /* ===== YENİ ARKAPLAN (NEBULA ETKİSİ) ===== */
+        .nebula-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(145deg, #1a0303 0%, #000000 100%);
+            background: linear-gradient(145deg, #0b0b1f 0%, #1a0f2e 50%, #0a0a1a 100%);
             z-index: -2;
         }
-        
-        .blood-overlay {
+
+        .nebula-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 30% 40%, rgba(180,0,0,0.3) 0%, transparent 40%),
-                        radial-gradient(circle at 70% 60%, rgba(120,0,0,0.2) 0%, transparent 45%),
-                        repeating-linear-gradient(45deg, rgba(139,0,0,0.1) 0px, rgba(139,0,0,0.1) 2px, transparent 2px, transparent 4px);
-            animation: bloodWave 12s ease-in-out infinite, bloodPulse 4s ease-in-out infinite;
+            background: radial-gradient(circle at 20% 30%, rgba(100, 50, 200, 0.25) 0%, transparent 35%),
+                        radial-gradient(circle at 80% 70%, rgba(200, 50, 255, 0.2) 0%, transparent 40%),
+                        repeating-linear-gradient(45deg, rgba(150, 0, 255, 0.03) 0px, rgba(150, 0, 255, 0.03) 2px, transparent 2px, transparent 8px);
+            animation: nebulaDrift 18s ease-in-out infinite;
             z-index: -1;
         }
-        
-        @keyframes bloodWave {
-            0%,100% { opacity: 0.4; transform: scale(1); }
-            50% { opacity: 0.9; transform: scale(1.08); }
+
+        @keyframes nebulaDrift {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.9; transform: scale(1.07); }
         }
-        
-        @keyframes bloodPulse {
-            0%,100% { filter: brightness(1); }
-            50% { filter: brightness(1.3); }
-        }
-        
-        /* CAM EFEKT - GELİŞMİŞ */
+
+        /* ===== YENİ CAM PANEL (MOR TONLAR) ===== */
         .glass-panel {
-            background: rgba(20, 8, 8, 0.8);
+            background: rgba(18, 10, 30, 0.7);
             backdrop-filter: blur(15px);
-            border: 1px solid rgba(139, 0, 0, 0.5);
-            box-shadow: 0 8px 32px rgba(139, 0, 0, 0.3);
-            border-radius: 24px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: glassAppear 0.5s ease-out;
-            position: relative;
-            overflow: hidden;
+            border: 1px solid rgba(160, 100, 255, 0.4);
+            box-shadow: 0 8px 35px rgba(120, 50, 200, 0.4);
+            border-radius: 28px;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-        
-        .glass-panel::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,77,77,0.1), transparent);
-            transition: left 0.5s ease;
-            pointer-events: none;
-        }
-        
-        .glass-panel:hover::before {
-            left: 100%;
-        }
-        
+
         .glass-panel:hover {
-            border-color: #ff4d4d;
-            box-shadow: 0 8px 40px rgba(255, 77, 77, 0.4);
-            transform: translateY(-2px);
+            border-color: #b77dff;
+            box-shadow: 0 8px 45px #8a5be0;
         }
-        
-        @keyframes glassAppear {
-            from {
-                opacity: 0;
-                transform: translateY(20px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-        
-        /* BAŞLIK ANİMASYONU */
+
+        /* ===== YENİ BAŞLIK (RENKLİ PARILTI) ===== */
         .cyber-title {
             font-size: 36px;
             font-weight: 900;
-            background: linear-gradient(135deg, #ff4d4d, #8b0000, #ff4d4d);
-            background-size: 200% 200%;
+            background: linear-gradient(135deg, #d9b3ff, #9f7aff, #c47aff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 20px #ff0000);
-            letter-spacing: 4px;
+            background-size: 200% 200%;
+            filter: drop-shadow(0 0 15px #a06eff);
+            letter-spacing: 3px;
             text-transform: uppercase;
-            animation: titleGradient 3s ease infinite, titleGlow 2s ease-in-out infinite;
+            animation: titleBreath 4s ease-in-out infinite;
         }
-        
-        @keyframes titleGradient {
-            0%,100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+
+        @keyframes titleBreath {
+            0% { filter: drop-shadow(0 0 15px #a06eff); opacity: 1; }
+            50% { filter: drop-shadow(0 0 30px #d5a2ff); opacity: 0.95; }
         }
-        
-        @keyframes titleGlow {
-            0%,100% { filter: drop-shadow(0 0 20px #ff0000); }
-            50% { filter: drop-shadow(0 0 40px #ff4d4d); }
-        }
-        
-        /* INPUT ANİMASYONLARI */
-        .input-blood {
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid #8b0000;
-            border-radius: 14px;
+
+        /* ===== YENİ INPUT (MOR PARLAMALI) ===== */
+        .input-cyber {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid #7850c0;
+            border-radius: 16px;
             padding: 16px;
             color: white;
             width: 100%;
             font-size: 16px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: inputAppear 0.4s ease-out;
-            transform-origin: left;
+            transition: all 0.2s ease-in;
         }
-        
-        @keyframes inputAppear {
-            from {
-                opacity: 0;
-                transform: scaleX(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: scaleX(1);
-            }
-        }
-        
-        .input-blood:focus {
+
+        .input-cyber:focus {
             outline: none;
-            border-color: #ff4d4d;
-            box-shadow: 0 0 30px #ff0000;
-            transform: scale(1.02) translateY(-2px);
-            background: rgba(0, 0, 0, 0.7);
+            border-color: #b77dff;
+            box-shadow: 0 0 25px #a06eff;
+            background: rgba(15, 5, 25, 0.7);
+            transform: scale(1.01) translateY(-1px);
         }
-        
-        .input-blood:hover {
-            border-color: #ff4d4d;
-            transform: translateY(-1px);
-        }
-        
-        /* BUTON ANİMASYONLARI */
+
+        /* ===== YENİ BUTONLAR (MOR/KOYU MAVİ) ===== */
         .btn-primary {
-            background: linear-gradient(135deg, #8b0000, #4a0000);
-            border: 1px solid #ff4d4d;
-            border-radius: 14px;
+            background: linear-gradient(135deg, #6d3b9e, #392759);
+            border: 1px solid #b77dff;
+            border-radius: 16px;
             padding: 16px;
             color: white;
             font-weight: 700;
             font-size: 16px;
             width: 100%;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            animation: buttonAppear 0.5s ease-out;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 15px rgba(120, 60, 200, 0.3);
         }
-        
-        @keyframes buttonAppear {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-        
-        .btn-primary::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-        
-        .btn-primary:active::after {
-            width: 300px;
-            height: 300px;
-        }
-        
+
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px #ff0000;
-            background: linear-gradient(135deg, #a00000, #5a0000);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 30px #8f5be0;
+            background: linear-gradient(135deg, #824cba, #4f3177);
         }
-        
+
         .btn-primary:active {
-            transform: translateY(0);
+            transform: translateY(0) scale(0.98);
         }
-        
+
         .btn-secondary {
             background: transparent;
-            border: 1px solid #8b0000;
-            border-radius: 10px;
+            border: 1px solid #7850c0;
+            border-radius: 12px;
             padding: 8px 14px;
-            color: #ff9999;
+            color: #c7b0ff;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            animation: buttonAppear 0.5s ease-out;
-            position: relative;
-            overflow: hidden;
+            transition: 0.2s;
         }
-        
+
         .btn-secondary:hover {
-            background: rgba(139, 0, 0, 0.2);
-            border-color: #ff4d4d;
+            background: rgba(120, 80, 200, 0.2);
+            border-color: #b77dff;
             color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3);
+            transform: translateY(-1px);
         }
-        
-        .btn-secondary:active {
-            transform: translateY(0);
-        }
-        
+
         .btn-danger {
-            background: linear-gradient(135deg, #8b0000, #4a0000);
-            border: 1px solid #ff4d4d;
+            background: linear-gradient(135deg, #a040a0, #5a2d5a);
+            border: 1px solid #e088ff;
             border-radius: 14px;
             padding: 12px;
             color: white;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
-            animation: buttonAppear 0.5s ease-out;
+            transition: 0.25s;
         }
-        
         .btn-danger:hover {
-            background: linear-gradient(135deg, #a00000, #6b0000);
+            background: linear-gradient(135deg, #c058c0, #733d73);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px #ff0000;
+            box-shadow: 0 8px 20px #b266ff;
         }
-        
-        /* MENÜ ÖĞELERİ */
+
+        /* ===== MENÜ ÖĞELERİ ===== */
         .menu-item {
-            background: rgba(139, 0, 0, 0.1);
-            border: 1px solid #8b0000;
-            border-radius: 12px;
+            background: rgba(90, 50, 140, 0.15);
+            border: 1px solid #6a4a9a;
+            border-radius: 14px;
             padding: 14px;
             margin-bottom: 8px;
-            color: #ffb3b3;
+            color: #d1c0ff;
             width: 100%;
             text-align: left;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: menuItemAppear 0.4s ease-out;
-            position: relative;
-            overflow: hidden;
+            transition: 0.25s;
         }
-        
-        @keyframes menuItemAppear {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
+
         .menu-item:hover {
-            background: rgba(139, 0, 0, 0.3);
-            border-color: #ff4d4d;
-            transform: translateX(5px) translateY(-2px);
-            box-shadow: -5px 5px 20px rgba(255, 77, 77, 0.3);
+            background: rgba(130, 70, 200, 0.3);
+            border-color: #b77dff;
+            transform: translateX(6px) translateY(-1px);
             color: white;
+            box-shadow: -4px 4px 15px rgba(160, 100, 255, 0.4);
         }
-        
-        .menu-item::before {
-            content: '▶';
-            position: absolute;
-            left: -20px;
-            color: #ff4d4d;
-            transition: left 0.3s ease;
-        }
-        
-        .menu-item:hover::before {
-            left: 5px;
-        }
-        
-        /* SONUÇ KARTLARI */
+
+        /* ===== SONUÇ KARTLARI ===== */
         .result-card {
-            background: linear-gradient(145deg, #1e1212, #140a0a);
-            border-radius: 20px;
+            background: linear-gradient(145deg, #1f1429, #140e1f);
+            border-radius: 22px;
             padding: 18px;
             margin-bottom: 14px;
-            border: 1px solid #8b0000;
-            animation: resultCardAppear 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            transition: all 0.3s ease;
+            border: 1px solid #7a59b3;
+            transition: 0.25s;
         }
-        
-        @keyframes resultCardAppear {
-            from {
-                opacity: 0;
-                transform: translateY(30px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-        
+
         .result-card:hover {
-            border-color: #ff4d4d;
-            transform: translateY(-3px) scale(1.01);
-            box-shadow: 0 10px 30px rgba(255, 77, 77, 0.2);
+            border-color: #bf8cff;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px #8040c0;
         }
-        
-        /* DATA İTEM */
+
         .data-item {
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.35);
             border-radius: 12px;
             padding: 10px 12px;
             margin-bottom: 8px;
-            border-left: 3px solid #ff4d4d;
-            animation: dataItemAppear 0.4s ease-out;
-            transition: all 0.3s ease;
+            border-left: 3px solid #b266ff;
         }
-        
-        @keyframes dataItemAppear {
-            from {
-                opacity: 0;
-                transform: translateX(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+
+        .data-label {
+            font-size: 11px;
+            color: #c9b0ff;
+            text-transform: uppercase;
         }
-        
-        .data-item:hover {
-            background: rgba(139, 0, 0, 0.2);
-            transform: translateX(5px);
-            border-left-width: 5px;
+
+        .data-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
         }
-        
-        /* LOADER - GELİŞMİŞ */
-        .loader {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(139, 0, 0, 0.2);
-            border-top: 4px solid #ff0000;
-            border-right: 4px solid #ff0000;
-            border-radius: 50%;
-            animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite, pulse 2s ease-in-out infinite;
-            margin: 30px auto;
-            position: relative;
-        }
-        
-        .loader::after {
-            content: '';
-            position: absolute;
-            top: -4px;
-            left: -4px;
-            right: -4px;
-            bottom: -4px;
-            border: 4px solid transparent;
-            border-top: 4px solid #ff4d4d;
-            border-right: 4px solid #ff4d4d;
-            border-radius: 50%;
-            animation: spin 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite reverse;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        @keyframes pulse {
-            0%,100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.1); }
-        }
-        
-        /* TELEGRAM POPUP */
-        .telegram-popup {
-            animation: slideDown 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55), pulse 2s ease-in-out infinite;
-            border-bottom: 3px solid #ff0000;
-            background: rgba(20, 8, 8, 0.95);
-            backdrop-filter: blur(10px);
-        }
-        
-        @keyframes slideDown {
-            from { 
-                transform: translateY(-100%) scale(0.9);
-                opacity: 0;
-            }
-            to { 
-                transform: translateY(0) scale(1);
-                opacity: 1;
-            }
-        }
-        
-        /* STATS CARD */
+
+        /* ===== İSTATİSTİK KARTLARI ===== */
         .stats-card {
-            background: rgba(139, 0, 0, 0.1);
-            border: 1px solid #8b0000;
-            border-radius: 16px;
+            background: rgba(80, 40, 130, 0.2);
+            border: 1px solid #7f5ac0;
+            border-radius: 18px;
             padding: 20px;
             text-align: center;
-            transition: all 0.3s ease;
-            animation: statsCardAppear 0.5s ease-out;
+            transition: 0.25s;
         }
-        
-        @keyframes statsCardAppear {
-            from {
-                opacity: 0;
-                transform: scale(0.8) translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-        
+
         .stats-card:hover {
-            transform: translateY(-5px) scale(1.05);
-            border-color: #ff4d4d;
-            box-shadow: 0 10px 30px rgba(255, 77, 77, 0.3);
+            transform: scale(1.03) translateY(-4px);
+            border-color: #ba93ff;
+            box-shadow: 0 10px 25px #9366e0;
         }
-        
-        .stats-card i {
-            transition: all 0.3s ease;
-        }
-        
-        .stats-card:hover i {
-            transform: scale(1.2) rotate(360deg);
-            color: #ff4d4d;
-        }
-        
-        /* ANNOUNCEMENT */
+
+        /* ===== DUYURU KARTI ===== */
         .announcement {
             background: rgba(255, 215, 0, 0.1);
-            border: 1px solid #ffd700;
-            border-radius: 12px;
+            border: 1px solid #d9b347;
+            border-radius: 14px;
             padding: 12px;
             margin-bottom: 12px;
-            animation: announcementSlide 0.5s ease-out;
-            transition: all 0.3s ease;
+            color: #fff0b5;
         }
-        
-        @keyframes announcementSlide {
-            from {
-                opacity: 0;
-                transform: translateX(-100%);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+
+        /* ===== YÜKLEYİCİ (LOADER) ===== */
+        .loader {
+            width: 55px;
+            height: 55px;
+            border: 4px solid #352a4a;
+            border-top: 4px solid #b266ff;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+            margin: 25px auto;
         }
-        
-        .announcement:hover {
-            background: rgba(255, 215, 0, 0.2);
-            transform: scale(1.02) translateX(5px);
-            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.2);
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #1e132b; }
+        ::-webkit-scrollbar-thumb { background: #8a5be0; border-radius: 10px; }
+
+        /* ===== ANİMASYONLAR (KASMASIZ) ===== */
+        @keyframes gentleRise {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        
-        /* SİDEBAR */
-        #sidebar {
-            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+        .gentle-animation {
+            animation: gentleRise 0.4s ease-out;
         }
-        
-        /* SAYFA GEÇİŞLERİ */
-        .fade-enter {
-            animation: fadeIn 0.5s ease-out;
-        }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-        
-        /* SCROLLBAR - ÖZEL */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #1a0a0a;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #8b0000;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #ff4d4d;
-        }
-        
-        /* GİRİŞ MODAL */
-        #auth-modal {
-            animation: modalBackdrop 0.3s ease-out;
-        }
-        
-        @keyframes modalBackdrop {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
+
+        /* Modal girişi */
         #auth-modal .glass-panel {
-            animation: modalAppear 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        
-        @keyframes modalAppear {
-            from {
-                opacity: 0;
-                transform: scale(0.7) translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+        @keyframes modalPop {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
-        
-        /* NAVBAR */
-        nav {
-            animation: navbarSlide 0.5s ease-out;
+
+        /* Navbar */
+        nav { animation: slideDown 0.35s ease; }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-100%); }
         }
-        
-        @keyframes navbarSlide {
-            from {
-                opacity: 0;
-                transform: translateY(-100%);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        /* BUTON TIKLAMA EFEKTİ */
-        .ripple {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .ripple:after {
-            content: "";
-            display: block;
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
-            background-repeat: no-repeat;
-            background-position: 50%;
-            transform: scale(10, 10);
-            opacity: 0;
-            transition: transform 0.5s, opacity 0.8s;
-        }
-        
-        .ripple:active:after {
-            transform: scale(0, 0);
-            opacity: 0.3;
-            transition: 0s;
-        }
-        
-        /* YÜKLENİYOR YAZISI */
-        .loading-text {
-            animation: loadingDots 1.5s ease-in-out infinite;
-        }
-        
-        @keyframes loadingDots {
-            0%,20% { content: '.'; }
-            40%,60% { content: '..'; }
-            80%,100% { content: '...'; }
+
+        /* Debug paneli */
+        .debug-panel {
+            position: fixed; bottom: 10px; right: 10px;
+            background: #1c1128; border: 1px solid #7850c0;
+            border-radius: 10px; padding: 8px; font-size: 11px;
+            color: #bb9eff; z-index: 100;
         }
     </style>
 </head>
 <body>
-    <div class="blood-bg"></div>
-    <div class="blood-overlay"></div>
+    <!-- Yeni arkaplan -->
+    <div class="nebula-bg"></div>
+    <div class="nebula-overlay"></div>
 
-    <div id="debugPanel" class="debug-panel"></div>
+    <!-- Hata Ayıklama Paneli -->
+    <div id="debugPanel" class="debug-panel hidden"></div>
 
-    <div id="telegramPopup" class="fixed top-0 left-0 right-0 telegram-popup py-3 px-5 flex items-center justify-between z-50" style="display: none;">
+    <!-- TELEGRAM POPUP (Renk uyumlu) -->
+    <div id="telegramPopup" class="fixed top-0 left-0 right-0 z-50 py-3 px-5 flex items-center justify-between" style="background: #1c0f2b; border-bottom: 3px solid #b266ff; display: none;">
         <div class="flex items-center gap-3">
-            <i class="fab fa-telegram text-2xl" style="color: #ff4d4d; animation: spin 3s linear infinite;"></i>
-            <span class="font-bold text-white">🔥 @cybersorgu</span>
+            <i class="fab fa-telegram text-2xl" style="color: #b77dff;"></i>
+            <span class="font-bold text-white">🔥 @cyberion</span>
         </div>
-        <a href="https://t.me/cybersorgu" target="_blank" class="btn-secondary text-xs py-2">KATIL</a>
+        <a href="#" class="btn-secondary text-xs py-2">KATIL</a>
     </div>
 
-    <div id="security-layer" class="fixed inset-0 z-50 flex items-center justify-center" style="background: #0a0000;">
-        <div class="glass-panel p-8 text-center max-w-sm w-11/12">
-            <i class="fas fa-shield-alt text-5xl mb-4" style="color: #ff4d4d; animation: pulse 2s ease-in-out infinite;"></i>
-            <h2 class="cyber-title text-3xl mb-2">CYBERSORGU</h2>
-            <p class="mb-6 opacity-80 text-white">Güvenlik doğrulaması yapılıyor...</p>
-            <button onclick="verifySecurity()" class="btn-primary ripple">DOĞRULAMAYI BAŞLAT</button>
+    <!-- GÜVENLİK KATMANI (ilk ekran) -->
+    <div id="security-layer" class="fixed inset-0 z-50 flex items-center justify-center" style="background: #0b0712;">
+        <div class="glass-panel p-8 text-center max-w-sm w-11/12 gentle-animation">
+            <i class="fas fa-shield-halved text-5xl mb-4" style="color: #b77dff;"></i>
+            <h2 class="cyber-title text-3xl mb-2">CYBERION</h2>
+            <p class="mb-6 opacity-80 text-white">Güvenlik katmanı başlatılıyor...</p>
+            <button onclick="verifySecurity()" class="btn-primary">DOĞRULA</button>
         </div>
     </div>
 
-    <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden" style="background: rgba(0,0,0,0.95); backdrop-filter: blur(5px);">
+    <!-- GİRİŞ/KAYIT MODAL -->
+    <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden" style="background: rgba(5,3,10,0.95);">
         <div class="glass-panel p-8 max-w-md w-11/12">
             <div class="text-center mb-6">
-                <i class="fas fa-skull text-5xl mb-3" style="color: #ff4d4d; animation: pulse 2s ease-in-out infinite;"></i>
-                <h2 class="cyber-title text-3xl">CYBERSORGU</h2>
-                <p class="text-red-300 mt-2">Giriş Yap veya Kayıt Ol</p>
+                <i class="fas fa-robot text-5xl mb-3" style="color: #b77dff;"></i>
+                <h2 class="cyber-title text-3xl">CYBERION</h2>
+                <p class="text-indigo-300 mt-2">Giriş / Kayıt</p>
             </div>
-            
             <div class="flex gap-2 mb-6">
-                <button onclick="switchAuthTab('login')" id="login-tab" class="flex-1 py-3 rounded-xl font-bold transition-all duration-300" style="background: #8b0000; color: white;">GİRİŞ</button>
-                <button onclick="switchAuthTab('register')" id="register-tab" class="flex-1 py-3 rounded-xl font-bold transition-all duration-300" style="background: rgba(139,0,0,0.3); color: #ff9999;">KAYIT</button>
+                <button onclick="switchAuthTab('login')" id="login-tab" class="flex-1 py-3 rounded-xl font-bold" style="background: #6b3fa0; color:white;">GİRİŞ</button>
+                <button onclick="switchAuthTab('register')" id="register-tab" class="flex-1 py-3 rounded-xl font-bold" style="background: #2f1f47; color:#beb0ff;">KAYIT</button>
             </div>
-            
+            <!-- Giriş -->
             <div id="login-form">
-                <div class="mb-4">
-                    <input type="text" id="login-username" placeholder="Kullanıcı Adı" class="input-blood">
-                </div>
-                <div class="mb-4">
-                    <input type="password" id="login-password" placeholder="Şifre" class="input-blood">
-                </div>
-                <button onclick="handleLogin()" class="btn-primary ripple mb-3">GİRİŞ YAP</button>
+                <div class="mb-4"><input type="text" id="login-username" placeholder="Kullanıcı Adı" class="input-cyber"></div>
+                <div class="mb-4"><input type="password" id="login-password" placeholder="Şifre" class="input-cyber"></div>
+                <button onclick="handleLogin()" class="btn-primary mb-3">GİRİŞ YAP</button>
+                <!-- admin bilgisi gözükmez -->
             </div>
-            
+            <!-- Kayıt -->
             <div id="register-form" style="display: none;">
-                <div class="mb-4">
-                    <input type="text" id="reg-username" placeholder="Kullanıcı Adı" class="input-blood">
-                </div>
-                <div class="mb-4">
-                    <input type="password" id="reg-password" placeholder="Şifre" class="input-blood">
-                </div>
-                <div class="mb-4">
-                    <input type="password" id="reg-password2" placeholder="Şifre Tekrar" class="input-blood">
-                </div>
-                <button onclick="handleRegister()" class="btn-primary ripple">KAYIT OL</button>
+                <div class="mb-4"><input type="text" id="reg-username" placeholder="Kullanıcı Adı" class="input-cyber"></div>
+                <div class="mb-4"><input type="password" id="reg-password" placeholder="Şifre" class="input-cyber"></div>
+                <div class="mb-4"><input type="password" id="reg-password2" placeholder="Şifre Tekrar" class="input-cyber"></div>
+                <button onclick="handleRegister()" class="btn-primary">KAYIT OL</button>
             </div>
         </div>
     </div>
 
+    <!-- ANA UYGULAMA -->
     <div id="main-app" class="hidden h-full flex flex-col">
+        <!-- NAVBAR -->
         <nav class="glass-panel px-4 py-3 flex justify-between items-center mx-3 mt-2">
-            <button onclick="toggleMenu()" class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 hover:bg-red-900" style="background: rgba(139,0,0,0.3);">
-                <i class="fas fa-bars text-xl" style="color: #ff4d4d;"></i>
+            <button onclick="toggleMenu()" class="w-10 h-10 rounded-full flex items-center justify-center" style="background: #342550;">
+                <i class="fas fa-bars text-xl" style="color: #b77dff;"></i>
             </button>
-            <span class="cyber-title text-2xl">CYBERSORGU</span>
+            <span class="cyber-title text-2xl">CYBERION</span>
             <div class="flex items-center gap-2">
-                <span id="user-badge" class="text-sm hidden px-3 py-1 rounded-full transition-all duration-300 hover:scale-105" style="background: #8b0000; color: white;"></span>
-                <button onclick="logout()" class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 hover:bg-red-900" style="background: rgba(139,0,0,0.3);">
-                    <i class="fas fa-sign-out-alt text-xl" style="color: #ff4d4d;"></i>
+                <span id="user-badge" class="text-sm hidden px-3 py-1 rounded-full" style="background: #5a3993; color:white;"></span>
+                <button onclick="logout()" class="w-10 h-10 rounded-full flex items-center justify-center" style="background:#342550;">
+                    <i class="fas fa-sign-out-alt text-xl" style="color: #b77dff;"></i>
                 </button>
             </div>
         </nav>
 
+        <!-- Duyuru Alanı -->
         <div id="announcement-container" class="mx-3 mt-2"></div>
 
-        <div id="sidebar" class="fixed top-0 left-0 h-full w-72 glass-panel z-40 transform -translate-x-full transition-transform duration-500 p-5 overflow-y-auto">
+        <!-- Menü (sidebar) -->
+        <div id="sidebar" class="fixed top-0 left-0 h-full w-72 glass-panel z-40 transform -translate-x-full transition-transform duration-300 p-5 overflow-y-auto">
             <div class="flex justify-between items-center mb-6">
-                <span class="font-bold text-lg" style="color: #ff4d4d;">⚔️ SORGULAR</span>
-                <button onclick="toggleMenu()" class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 hover:bg-red-900" style="background: rgba(139,0,0,0.3);">
-                    <i class="fas fa-times" style="color: #ff4d4d;"></i>
+                <span class="font-bold text-lg" style="color:#b77dff;">⚡ SORGULAR</span>
+                <button onclick="toggleMenu()" class="w-8 h-8 rounded-full flex items-center justify-center" style="background:#342550;">
+                    <i class="fas fa-times" style="color:#b77dff;"></i>
                 </button>
             </div>
             <div id="menu-items" class="space-y-2"></div>
-            
-            <div id="admin-menu-section" class="mt-6 pt-4 border-t border-red-900 hidden">
-                <span class="font-bold text-lg mb-3 block" style="color: #ffd700;">👑 ADMIN PANELİ</span>
-                <button onclick="showAdminPanel()" class="menu-item">
-                    <i class="fas fa-crown mr-2"></i> Admin Paneli
-                </button>
-                <button onclick="showAnnouncements()" class="menu-item">
-                    <i class="fas fa-bullhorn mr-2"></i> Duyuru Yönetimi
-                </button>
-                <button onclick="showStats()" class="menu-item">
-                    <i class="fas fa-chart-line mr-2"></i> İstatistikler
-                </button>
-                <button onclick="showUsers()" class="menu-item">
-                    <i class="fas fa-users mr-2"></i> Kullanıcılar
-                </button>
+            <!-- Admin menü (gizli) -->
+            <div id="admin-menu-section" class="mt-6 pt-4 border-t border-indigo-800 hidden">
+                <span class="font-bold text-lg mb-3 block" style="color: #ffdb7e;">👑 ADMIN</span>
+                <button onclick="showAdminPanel()" class="menu-item"><i class="fas fa-crown mr-2"></i>Admin Paneli</button>
+                <button onclick="showAnnouncements()" class="menu-item"><i class="fas fa-bullhorn mr-2"></i>Duyuru Yönetimi</button>
+                <button onclick="showStats()" class="menu-item"><i class="fas fa-chart-line mr-2"></i>İstatistikler</button>
+                <button onclick="showUsers()" class="menu-item"><i class="fas fa-users mr-2"></i>Kullanıcılar</button>
             </div>
         </div>
 
+        <!-- Ana İçerik -->
         <main class="flex-1 overflow-y-auto p-4">
-            <div id="query-section" class="glass-panel p-5 mb-4">
-                <h1 id="service-title" class="text-center font-bold text-xl mb-1" style="color: #ffb3b3;">TC Sorgu</h1>
-                <p id="service-desc" class="text-center text-sm opacity-70 mb-4">TC Kimlik Numarası Girin</p>
-                
+            <!-- Sorgu Kartı -->
+            <div id="query-section" class="glass-panel p-5 mb-4 gentle-animation">
+                <h1 id="service-title" class="text-center font-bold text-xl mb-1" style="color:#d1b5ff;">TC Sorgu</h1>
+                <p id="service-desc" class="text-center text-sm opacity-70 mb-4">TC Kimlik No Girin</p>
                 <div id="input-container">
-                    <input type="text" id="input-tc" placeholder="TC KİMLİK NO GİRİN" class="input-blood mb-3">
-                    <button onclick="runQuery()" class="btn-primary ripple">
-                        <i class="fas fa-search mr-2"></i>SORGULAMAYI BAŞLAT
-                    </button>
+                    <input type="text" id="input-tc" placeholder="TC KİMLİK NO" class="input-cyber mb-3">
+                    <button onclick="runQuery()" class="btn-primary"><i class="fas fa-search mr-2"></i>SORGULA</button>
                 </div>
             </div>
 
+            <!-- Sonuç -->
             <div id="result-container" style="display: none;">
                 <div class="flex justify-between items-center mb-3">
-                    <h3 class="font-bold flex items-center gap-2" style="color: #ffb3b3;">
-                        <i class="fas fa-skull" style="color: #ff4d4d; animation: pulse 2s ease-in-out infinite;"></i> SONUÇ
-                    </h3>
+                    <h3 class="font-bold flex items-center gap-2" style="color:#d1b5ff;"><i class="fas fa-dragon" style="color:#b77dff;"></i> SONUÇ</h3>
                     <div class="flex gap-2">
-                        <button onclick="copyResult()" class="btn-secondary ripple"><i class="fas fa-copy mr-1"></i>KOPYALA</button>
-                        <button onclick="downloadResult()" class="btn-secondary ripple"><i class="fas fa-download mr-1"></i>İNDİR</button>
+                        <button onclick="copyResult()" class="btn-secondary"><i class="fas fa-copy mr-1"></i>KOPYALA</button>
+                        <button onclick="downloadResult()" class="btn-secondary"><i class="fas fa-download mr-1"></i>İNDİR</button>
                     </div>
                 </div>
                 <div id="output-box"></div>
             </div>
 
-            <div id="admin-panel" style="display: none;">
+            <!-- Admin panel içeriği -->
+            <div id="admin-panel" style="display: none;"> 
                 <div class="glass-panel p-6">
-                    <h2 class="text-2xl font-bold mb-6 flex items-center gap-2" style="color: #ffd700;">
-                        <i class="fas fa-crown"></i> ADMIN PANELİ
-                    </h2>
-                    
+                    <h2 class="text-2xl font-bold mb-6 flex items-center gap-2" style="color:#ffdb7e;"><i class="fas fa-crown"></i> ADMIN PANELİ</h2>
+                    <!-- İstatistik kartları -->
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                        <div class="stats-card">
-                            <i class="fas fa-users text-3xl mb-2" style="color: #ff4d4d;"></i>
-                            <div class="text-2xl font-bold" id="stats-users">0</div>
-                            <div class="text-sm opacity-70">Kullanıcı</div>
-                        </div>
-                        <div class="stats-card">
-                            <i class="fas fa-search text-3xl mb-2" style="color: #ff4d4d;"></i>
-                            <div class="text-2xl font-bold" id="stats-queries">0</div>
-                            <div class="text-sm opacity-70">Sorgu</div>
-                        </div>
-                        <div class="stats-card">
-                            <i class="fas fa-clock text-3xl mb-2" style="color: #ff4d4d;"></i>
-                            <div class="text-2xl font-bold" id="stats-online">0</div>
-                            <div class="text-sm opacity-70">Online</div>
-                        </div>
-                        <div class="stats-card">
-                            <i class="fas fa-bullhorn text-3xl mb-2" style="color: #ff4d4d;"></i>
-                            <div class="text-2xl font-bold" id="stats-announcements">0</div>
-                            <div class="text-sm opacity-70">Duyuru</div>
-                        </div>
+                        <div class="stats-card"><i class="fas fa-users text-3xl mb-2" style="color:#b77dff;"></i><div class="text-2xl font-bold" id="stats-users">0</div><div class="text-sm opacity-70">Kullanıcı</div></div>
+                        <div class="stats-card"><i class="fas fa-search text-3xl mb-2" style="color:#b77dff;"></i><div class="text-2xl font-bold" id="stats-queries">0</div><div class="text-sm opacity-70">Sorgu</div></div>
+                        <div class="stats-card"><i class="fas fa-clock text-3xl mb-2" style="color:#b77dff;"></i><div class="text-2xl font-bold" id="stats-online">0</div><div class="text-sm opacity-70">Online</div></div>
+                        <div class="stats-card"><i class="fas fa-bullhorn text-3xl mb-2" style="color:#b77dff;"></i><div class="text-2xl font-bold" id="stats-announcements">0</div><div class="text-sm opacity-70">Duyuru</div></div>
                     </div>
-                    
+                    <div class="mb-6"><canvas id="statsChart"></canvas></div>
+                    <!-- Duyuru Yönetimi -->
                     <div class="mb-6">
-                        <canvas id="statsChart"></canvas>
-                    </div>
-                    
-                    <div class="mb-6">
-                        <h3 class="text-xl font-bold mb-4" style="color: #ffb3b3;">📢 Duyuru Yönetimi</h3>
-                        <div class="mb-4">
-                            <textarea id="announcement-text" class="input-blood" rows="3" placeholder="Duyuru metni..."></textarea>
+                        <h3 class="text-xl font-bold mb-4" style="color:#d1b5ff;">📢 Duyuru</h3>
+                        <textarea id="announcement-text" class="input-cyber" rows="3" placeholder="Duyuru metni..."></textarea>
+                        <div class="flex gap-2 mt-3">
+                            <button onclick="addAnnouncement()" class="btn-primary flex-1">EKLE</button>
+                            <button onclick="clearAnnouncements()" class="btn-danger flex-1">TEMİZLE</button>
                         </div>
-                        <div class="flex gap-2 mb-4">
-                            <button onclick="addAnnouncement()" class="btn-primary flex-1 ripple">DUYURU EKLE</button>
-                            <button onclick="clearAnnouncements()" class="btn-danger flex-1 ripple">TEMİZLE</button>
-                        </div>
-                        <div id="announcement-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
+                        <div id="announcement-list" class="space-y-2 mt-4 max-h-60 overflow-auto"></div>
                     </div>
-                    
-                    <div>
-                        <h3 class="text-xl font-bold mb-4" style="color: #ffb3b3;">👥 Kullanıcı Listesi</h3>
-                        <div id="user-list" class="space-y-2 max-h-60 overflow-y-auto"></div>
-                    </div>
+                    <!-- Kullanıcı listesi -->
+                    <div><h3 class="text-xl font-bold mb-4" style="color:#d1b5ff;">👥 Kullanıcılar</h3><div id="user-list" class="space-y-2 max-h-60 overflow-auto"></div></div>
                 </div>
             </div>
         </main>
     </div>
 
     <script>
-        // ÖNCEKİ JAVASCRIPT KODU AYNEN BURADA KALIYOR
-        // (Önceki gönderdiğim son JavaScript kodunun tamamı buraya kopyalanacak)
-        // Karışıklık olmaması için JavaScript kodunu tekrar yazmıyorum,
-        // ama orijinal JS kodunun tamamı buraya eklenecek.
-        
-        // NOT: Yukarıdaki CSS animasyonları eklendi, JS kodları aynen kalacak.
-        // Uzunluk sorunu olmaması için JS kodunu tekrar eklemedim,
-        // ama önceki son versiyondaki JS kodunun tamamı buraya kopyalanmalı.
+        // Hata ayıklama
+        function debugLog(msg, data) {
+            const p = document.getElementById('debugPanel');
+            p.classList.remove('hidden');
+            p.innerHTML = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            setTimeout(()=>p.classList.add('hidden'),4000);
+        }
+
+        // ========== API'LER (AYNI) ==========
+        const API_BASE = 'https://apiservices.alwaysdata.net/apiservices/';
+        const services = [
+            { id:'tc', name:'🔍 TC Sorgu', url:API_BASE+'tc.php?tc=', inputs:['tc'] },
+            { id:'tcpro', name:'💎 TC Pro', url:API_BASE+'tcpro.php?tc=', inputs:['tc'] },
+            { id:'adsoyad', name:'📇 Ad Soyad', url:API_BASE+'adsoyad.php?', inputs:['ad','soyad'] },
+            { id:'adsoyadpro', name:'⚡ Ad Soyad Pro', url:API_BASE+'adsoyadpro.php?', inputs:['ad','soyad','il'] },
+            { id:'aile', name:'👪 Aile Sorgu', url:API_BASE+'aile.php?tc=', inputs:['tc'] },
+            { id:'ailepro', name:'👑 Aile Pro', url:API_BASE+'ailepro.php?tc=', inputs:['tc'] },
+            { id:'adres', name:'🏠 Adres Sorgu', url:API_BASE+'adres.php?tc=', inputs:['tc'] },
+            { id:'tcgsm', name:'📱 TC→GSM', url:API_BASE+'tcgsm.php?tc=', inputs:['tc'] },
+            { id:'gsmtc', name:'🔄 GSM→TC', url:API_BASE+'gsmtc.php?gsm=', inputs:['gsm'] }
+        ];
+
+        let currentService = services[0];
+        let currentUser = null;
+        let isAdmin = false;
+        let myChart = null;
+
+        // User-Agent listesi
+        const USER_AGENTS = [ "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Safari/605.1.15", "Mozilla/5.0 (X11; Linux x86_64) Firefox/122.0" ];
+
+        // LocalStorage verileri
+        let users = JSON.parse(localStorage.getItem('cyber_users')) || [];
+        let announcements = JSON.parse(localStorage.getItem('cyber_announcements')) || [];
+        let queryLogs = JSON.parse(localStorage.getItem('cyber_queries')) || [];
+
+        // Admin (gizli)
+        if (!users.some(u=>u.username==='cyber21admin')) {
+            users.push({ username:'cyber21admin', password:'cyberx', isAdmin:true, createdAt:new Date().toISOString() });
+            localStorage.setItem('cyber_users',JSON.stringify(users));
+        }
+
+        // Telegram popup
+        setTimeout(()=>{
+            document.getElementById('telegramPopup').style.display='flex';
+            setTimeout(()=>document.getElementById('telegramPopup').style.display='none',5000);
+        },1000);
+
+        // Güvenlik doğrulama
+        function verifySecurity() {
+            document.querySelector('#security-layer button').innerHTML='<div class="loader"></div>';
+            setTimeout(()=>{
+                document.getElementById('security-layer').style.display='none';
+                document.getElementById('auth-modal').classList.remove('hidden');
+            },1500);
+        }
+
+        // Giriş/kayıt tab
+        function switchAuthTab(tab) {
+            if(tab==='login') {
+                document.getElementById('login-form').style.display='block';
+                document.getElementById('register-form').style.display='none';
+                document.getElementById('login-tab').style.background='#6b3fa0';
+                document.getElementById('register-tab').style.background='#2f1f47';
+            } else {
+                document.getElementById('login-form').style.display='none';
+                document.getElementById('register-form').style.display='block';
+                document.getElementById('register-tab').style.background='#6b3fa0';
+                document.getElementById('login-tab').style.background='#2f1f47';
+            }
+        }
+
+        // Giriş yap
+        function handleLogin() {
+            const u = document.getElementById('login-username').value;
+            const p = document.getElementById('login-password').value;
+            const user = users.find(x=>x.username===u && x.password===p);
+            if(user) {
+                currentUser = user;
+                isAdmin = user.isAdmin;
+                document.getElementById('auth-modal').classList.add('hidden');
+                document.getElementById('main-app').classList.remove('hidden');
+                document.getElementById('user-badge').classList.remove('hidden');
+                if(isAdmin) {
+                    document.getElementById('user-badge').innerHTML = '<i class="fas fa-crown mr-1"></i> ADMIN';
+                    document.getElementById('admin-menu-section').classList.remove('hidden');
+                } else {
+                    document.getElementById('user-badge').innerHTML = `<i class="fas fa-user mr-1"></i> ${u}`;
+                }
+                initMenu();
+                displayAnnouncements();
+            } else alert('Hatalı giriş');
+        }
+
+        // Kayıt
+        function handleRegister() {
+            const u = document.getElementById('reg-username').value;
+            const p = document.getElementById('reg-password').value;
+            const p2 = document.getElementById('reg-password2').value;
+            if(!u || !p) return alert('Boş bırakmayın');
+            if(p!==p2) return alert('Şifreler uyuşmuyor');
+            if(users.some(x=>x.username===u)) return alert('Kullanıcı var');
+            users.push({username:u,password:p,isAdmin:false,createdAt:new Date().toISOString()});
+            localStorage.setItem('cyber_users',JSON.stringify(users));
+            alert('Kayıt başarılı, giriş yapın');
+            switchAuthTab('login');
+        }
+
+        function logout() {
+            currentUser=null; isAdmin=false;
+            document.getElementById('main-app').classList.add('hidden');
+            document.getElementById('auth-modal').classList.remove('hidden');
+        }
+
+        function initMenu() {
+            const m=document.getElementById('menu-items'); m.innerHTML='';
+            services.forEach(s=>{
+                const btn=document.createElement('button');
+                btn.className='menu-item'; btn.innerHTML=s.name;
+                btn.onclick=()=>selectService(s);
+                m.appendChild(btn);
+            });
+        }
+
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+        }
+
+        function selectService(s) {
+            currentService=s; toggleMenu();
+            document.getElementById('service-title').innerText=s.name;
+            document.getElementById('service-desc').innerText=s.inputs.map(i=>i.toUpperCase()).join(' + ');
+            document.getElementById('query-section').style.display='block';
+            document.getElementById('admin-panel').style.display='none';
+            const container=document.getElementById('input-container'); container.innerHTML='';
+            s.inputs.forEach(i=>{
+                const inp=document.createElement('input');
+                inp.placeholder=i.toUpperCase()+' GİRİN'; inp.id='input-'+i; inp.className='input-cyber mb-3';
+                container.appendChild(inp);
+            });
+            const btn=document.createElement('button');
+            btn.className='btn-primary'; btn.innerHTML='<i class="fas fa-search mr-2"></i>SORGULA'; btn.onclick=runQuery;
+            container.appendChild(btn);
+            document.getElementById('result-container').style.display='none';
+        }
+
+        // Rastgele UA
+        function getRandomUserAgent() { return USER_AGENTS[Math.floor(Math.random()*USER_AGENTS.length)]; }
+
+        // JSON temizle
+        function cleanJson(obj) {
+            if(typeof obj!=='object'||!obj) return obj;
+            if(Array.isArray(obj)) return obj.map(cleanJson).filter(x=>x);
+            const clean={};
+            Object.entries(obj).forEach(([k,v])=>{
+                if(v && !k.toLowerCase().includes('developer') && !k.toLowerCase().includes('version') && !k.toLowerCase().includes('timestamp')) {
+                    if(typeof v==='object') { const nested=cleanJson(v); if(nested&&Object.keys(nested).length) clean[k]=nested; }
+                    else clean[k]=v;
+                }
+            });
+            return clean;
+        }
+
+        // Sorgu çalıştır (proxy yok)
+        async function runQuery() {
+            const out=document.getElementById('output-box'), resCont=document.getElementById('result-container');
+            let empty=false;
+            currentService.inputs.forEach(i=>{ if(!document.getElementById(`input-${i}`)?.value) empty=true; });
+            if(empty) return alert('Alanları doldur');
+
+            resCont.style.display='block'; out.innerHTML='<div class="loader"></div>';
+            let apiUrl=currentService.url;
+            if(currentService.inputs.length===1) apiUrl+=document.getElementById(`input-${currentService.inputs[0]}`)?.value;
+            else {
+                const params=[];
+                currentService.inputs.forEach(i=> params.push(`${i}=${encodeURIComponent(document.getElementById(`input-${i}`)?.value||'')}`) );
+                apiUrl+=params.join('&');
+            }
+
+            const ua = getRandomUserAgent();
+            debugLog('İstek: '+apiUrl);
+            try {
+                const resp = await fetch(apiUrl, {
+                    method:'GET',
+                    headers:{ 'User-Agent':ua, 'Accept':'application/json, text/plain, */*', Origin:location.origin, 'X-Requested-With':'XMLHttpRequest' },
+                    mode:'cors', credentials:'omit'
+                });
+                const data = await resp.text();
+                if(currentUser) {
+                    queryLogs.push({user:currentUser.username, service:currentService.name, time:new Date().toISOString()});
+                    localStorage.setItem('cyber_queries',JSON.stringify(queryLogs));
+                }
+                let html='<div class="space-y-4">';
+                try {
+                    const raw=JSON.parse(data);
+                    const json=cleanJson(raw);
+                    if(json.aile_bilgileri?.kayitlar) {
+                        json.aile_bilgileri.kayitlar.forEach((u,idx)=>{
+                            html+='<div class="result-card"><div style="color:#d1b5ff;">👤 '+ (u.ADI||'')+' '+(u.SOYADI||'')+'</div>';
+                            Object.entries(u).forEach(([k,v])=> { if(v) html+=`<div class="data-item"><div class="data-label">${k}</div><div class="data-value">${v}</div></div>`; });
+                            html+='</div>';
+                        });
+                    } else if(json.results?.length) {
+                        json.results.forEach((item,idx)=>{
+                            html+='<div class="result-card"><div style="color:#d1b5ff;">📌 KAYIT '+(idx+1)+'</div>';
+                            Object.entries(item).forEach(([k,v])=> { if(v) html+=`<div class="data-item"><div class="data-label">${k}</div><div class="data-value">${v}</div></div>`; });
+                            html+='</div>';
+                        });
+                    } else if(json.gsmler) {
+                        html+='<div class="result-card">'; json.gsmler.forEach(g=>html+=`<div class="data-item"><div class="data-label">GSM</div><div class="data-value">${g}</div></div>`); html+='</div>';
+                    } else {
+                        html+='<div class="result-card">';
+                        Object.entries(json).forEach(([k,v])=> { if(v && typeof v!=='object') html+=`<div class="data-item"><div class="data-label">${k}</div><div class="data-value">${v}</div></div>`; });
+                        html+='</div>';
+                    }
+                } catch(e) { html+=`<div class="result-card"><pre>${data}</pre></div>`; }
+                html+='</div>'; out.innerHTML=html;
+            } catch(err) {
+                out.innerHTML=`<div class="glass-panel p-6 text-center text-red-400">BAĞLANTI HATASI<br>${err.message}</div>`;
+            }
+        }
+
+        // copy / download
+        function copyResult() { navigator.clipboard.writeText(document.getElementById('output-box').innerText); alert('Kopyalandı'); }
+        function downloadResult() {
+            const text=document.getElementById('output-box').innerText;
+            const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text])); a.download='sonuc.txt'; a.click();
+        }
+
+        // Admin panel
+        function showAdminPanel() { toggleMenu(); document.getElementById('query-section').style.display='none'; document.getElementById('result-container').style.display='none'; document.getElementById('admin-panel').style.display='block'; updateAdminPanel(); }
+        function showAnnouncements() { showAdminPanel(); }
+        function showStats() { showAdminPanel(); }
+        function showUsers() { showAdminPanel(); }
+
+        function updateAdminPanel() {
+            document.getElementById('stats-users').innerText=users.length;
+            document.getElementById('stats-queries').innerText=queryLogs.length;
+            document.getElementById('stats-online').innerText=Math.floor(Math.random()*10)+5;
+            document.getElementById('stats-announcements').innerText=announcements.length;
+            const userList=document.getElementById('user-list'); userList.innerHTML='';
+            users.filter(u=>!u.isAdmin).forEach(u=>{ userList.innerHTML+=`<div class="flex justify-between p-2" style="background:#201530"><span>${u.username}</span><span class="text-xs">${new Date(u.createdAt).toLocaleDateString()}</span></div>`; });
+            const annList=document.getElementById('announcement-list'); annList.innerHTML='';
+            announcements.forEach((a,i)=>{ annList.innerHTML+=`<div class="flex justify-between p-2" style="background:#2f2540"><span>${a.text}</span><button onclick="deleteAnnouncement(${i})" class="text-red-400"><i class="fas fa-trash"></i></button></div>`; });
+            if(myChart) myChart.destroy();
+            const ctx=document.getElementById('statsChart').getContext('2d');
+            myChart=new Chart(ctx, {
+                type:'line',
+                data:{ labels:['00','04','08','12','16','20'], datasets:[{ label:'Sorgu', data:[12,19,25,32,28,35], borderColor:'#b77dff', backgroundColor:'rgba(150,100,255,0.1)' }] },
+                options:{ responsive:true, plugins:{ legend:{labels:{color:'#d1b5ff'}} } }
+            });
+        }
+
+        function addAnnouncement() {
+            const txt=document.getElementById('announcement-text').value; if(!txt) return;
+            announcements.push({text:txt,date:new Date().toISOString()});
+            localStorage.setItem('cyber_announcements',JSON.stringify(announcements));
+            document.getElementById('announcement-text').value='';
+            displayAnnouncements(); updateAdminPanel();
+        }
+        function deleteAnnouncement(i) { announcements.splice(i,1); localStorage.setItem('cyber_announcements',JSON.stringify(announcements)); displayAnnouncements(); updateAdminPanel(); }
+        function clearAnnouncements() { if(confirm('Emin misin?')) { announcements=[]; localStorage.setItem('cyber_announcements','[]'); displayAnnouncements(); updateAdminPanel(); } }
+        function displayAnnouncements() {
+            const container=document.getElementById('announcement-container'); container.innerHTML='';
+            announcements.forEach(a=>{ container.innerHTML+=`<div class="announcement flex items-center gap-2"><i class="fas fa-bullhorn" style="color:#ffd966;"></i><span>${a.text}</span></div>`; });
+        }
+
+        window.onload=()=>{ debugLog('Cyberion yüklendi'); };
     </script>
 </body>
 </html>
